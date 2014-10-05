@@ -1,4 +1,4 @@
-part of directcode.services;
+part of directcode.services.api;
 
 MongoDbService<Member> members = new MongoDbService<Member>("members");
 
