@@ -15,7 +15,7 @@ export 'package:redstone_mapper_mongo/manager.dart';
 export 'package:redstone_mapper_mongo/metadata.dart';
 
 export "package:redstone/server.dart" show
-  Route, Group, Attr, Interceptor, QueryParam, ErrorHandler, DefaultRoute, Body, GET, POST, PUT, DELETE, ErrorResponse, RedstonePlugin, Manager, request, response, Install, Inject, Ignore, chain;
+  Route, Group, Attr, Interceptor, QueryParam, ErrorHandler, DefaultRoute, Body, GET, POST, PUT, DELETE, ErrorResponse, RedstonePlugin, Manager, request, response, Install, Inject, Ignore, chain, JSON, FORM;
 
 bool useTokenFile = true;
 List<String> tokens;
@@ -39,7 +39,7 @@ void TokenPlugin(Manager manager) {
         "message": "The token that was provided is invalid."
       });
     } else {
-      app.chain.next();
+      return route(pathSegments, injector, request);
     }
   }, includeGroups: true);
 }
