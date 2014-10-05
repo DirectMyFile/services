@@ -15,16 +15,14 @@ void TokenPlugin(Manager manager) {
         "error": "token.required",
         "message": "A token is required to use this API."
       });
-    }
-
-    if (!tokens.contains(token)) {
+    } else if (!tokens.contains(token)) {
       app.chain.interrupt(statusCode: HttpStatus.UNAUTHORIZED, responseValue: {
         "error": "token.invalid",
         "message": "The token that was provided is invalid."
       });
+    } else {
+      app.chain.next();
     }
-
-    app.chain.next();
   }, includeGroups: true);
 }
 

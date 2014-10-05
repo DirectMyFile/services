@@ -21,4 +21,9 @@ class MemberService {
   @Route("/add", methods: const [POST])
   addMember(@Decode() Member member) =>
       members.insert(member);
+  
+  @RequiresToken()
+  @Route("/remove", methods: const [POST])
+  removeMember(@Decode() Member member) =>
+      members.remove(member);
 }
