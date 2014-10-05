@@ -1,0 +1,6 @@
+name: services
+dependencies:
+  redstone: ">=0.5.16 <0.6.0"
+  mustache4dart: ">=1.0.6 <2.0.0"
+  redstone_mapper: ">=0.1.8+1 <0.2.0"
+  redstone_mapper_mongo: ">=0.1.1+1 <0.2.0"
