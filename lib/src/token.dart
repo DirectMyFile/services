@@ -1,5 +1,6 @@
 part of directcode.services;
 
+bool useTokenFile = true;
 List<String> tokens;
 
 class RequiresToken {
@@ -27,13 +28,17 @@ void TokenPlugin(Manager manager) {
 }
 
 void loadTokens() {
-  var file = new File("tokens.json");
+  if (useTokenFile) {
+    var file = new File("tokens.json");
 
-  if (!file.existsSync()) {
-    file.writeAsStringSync("[]");
+    if (!file.existsSync()) {
+      file.writeAsStringSync("[]");
+    }
+
+    var content = file.readAsStringSync();
+
+    tokens = JSON.decode(content);
+  } else {
+    tokens = [];
   }
-
-  var content = file.readAsStringSync();
-
-  tokens = JSON.decode(content);
 }
