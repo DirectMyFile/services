@@ -8,6 +8,7 @@ import "api.dart";
 
 void startServices() {
   loadTokens();
+  loadConfig();
   
   var dbManager = new MongoDbManager("mongodb://localhost/services", poolSize: 3);
 

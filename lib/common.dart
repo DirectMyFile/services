@@ -20,6 +20,8 @@ export "package:redstone/server.dart" show
 bool useTokenFile = true;
 List<String> tokens;
 
+Map<String, dynamic> config;
+
 class RequiresToken {
   const RequiresToken();
 }
@@ -42,6 +44,18 @@ void TokenPlugin(Manager manager) {
       return route(pathSegments, injector, request);
     }
   }, includeGroups: true);
+}
+
+void loadConfig() {
+  var file = new File("config.json");
+
+  if (!file.existsSync()) {
+    file.writeAsStringSync("{}");
+  }
+
+  var content = file.readAsStringSync();
+
+  config = JSON.decode(content);
 }
 
 void loadTokens() {
