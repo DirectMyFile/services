@@ -112,8 +112,9 @@ class UserService {
     }).then((user) {
       var email = new Envelope();
       
-      email.subject = subject;
-      email.from = from;
+      if (subject != null) email.subject = subject;
+      if (from != null) email.from = from;
+      
       email.recipients.add(user.email);
       email.text = content;
       
