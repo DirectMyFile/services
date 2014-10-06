@@ -99,6 +99,34 @@ class UserService {
   list() =>
       users.find();
   
+  @RequiresToken()
+  @Route("/send_email", methods: const [POST])
+  sendEmail(@Body(JSON) Map input) {
+    var username = input['username'];
+    var subject = input['subject'];
+    var from = input['from'];
+    var content = input['body'];
+    
+    return users.findOne({
+      "username": username
+    }).then((user) {
+      var email = new Envelope();
+      
+      email.subject = subject;
+      email.from = from;
+      email.recipients.add(user.email);
+      email.text = content;
+      
+      return emailTransport.send(email);
+    }).then((_) {
+      return {
+        "sent": true
+      };
+    }).catchError((e) {
+      return new ErrorResponse(404, new APIError("user.not.found", "User not found."));
+    });
+  }
+  
   @Encode()
   @RequiresToken()
   @Route("/check", methods: const [POST])
