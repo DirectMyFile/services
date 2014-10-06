@@ -10,10 +10,15 @@ void startServices() {
   loadTokens();
   loadConfig();
   
+  setupAPI();
+  
   var dbManager = new MongoDbManager("mongodb://localhost/services", poolSize: 3);
 
   app.addPlugin(getMapperPlugin(dbManager));
   app.addPlugin(TokenPlugin);
   app.setupConsoleLog();
-  app.start();
+  
+  var port = config.containsKey("port") ? config['port'] : 8080;
+  
+  app.start(port: port);
 }

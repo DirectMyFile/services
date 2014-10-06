@@ -5,3 +5,4 @@ dependencies:
   redstone_mapper: ">=0.1.8+1 <0.2.0"
   redstone_mapper_mongo: ">=0.1.1+1 <0.2.0"
   password_hasher: ">=0.2.0 <0.3.0"
+  mailer: ">=0.8.12 <0.9.0"
