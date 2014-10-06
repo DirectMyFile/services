@@ -181,24 +181,22 @@ class EventService {
   
   @Route("/stats")
   stats() {
-    var out =  {
-      "listeners": {},
-      "events": {}
-    };
-    
-    var listeners = out["listeners"];
+    var listeners = {};
     
     for (var event in events.keys) {
       listeners[event] = events[event].length;
     }
     
-    var eventz = out["events"];
+    var eventz = {};
     
     for (var event in eventCounts.keys) {
       eventz[event] = eventCounts[event];
     }
     
-    return out;
+    return {
+      "listeners": listeners,
+      "events": events
+    };
   }
   
   
