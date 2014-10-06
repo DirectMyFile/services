@@ -4,6 +4,8 @@ PasswordHasher hasher = new PasswordHasher();
 
 MongoDbService<User> users = new MongoDbService<User>("users");
 
+var userValidator = new Validator(User, true);
+
 class User {
   @Id()
   String id;

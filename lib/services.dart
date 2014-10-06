@@ -3,10 +3,10 @@ library directcode.services;
 import "common.dart";
 import "package:redstone/server.dart" as app;
 
-@app.Install()
+@Install()
 import "api.dart";
 
-@app.Install()
+@Install()
 import "ui.dart";
 
 void startServices() {
@@ -19,6 +19,7 @@ void startServices() {
 
   app.addPlugin(getMapperPlugin(dbManager));
   app.addPlugin(TokenPlugin);
+  app.addPlugin(getWebSocketPlugin());
   app.setupConsoleLog();
   
   var port = config.containsKey("port") ? config['port'] : 8080;

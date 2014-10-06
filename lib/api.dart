@@ -4,11 +4,14 @@ import "package:mailer/mailer.dart";
 
 import "package:password_hasher/password_hasher.dart";
 
+import "dart:convert" as Convert;
+
 import "common.dart";
 
 part "src/api/members.dart";
 part "src/api/users.dart";
 part "src/api/projects.dart";
+part "src/api/events.dart";
 
 SmtpTransport emailTransport;
 
