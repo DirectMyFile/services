@@ -1,10 +1,16 @@
 part of directcode.services.api;
 
+EventEndpoint eventEndpoint;
+
 @WebSocketHandler("/api/events/ws")
 class EventEndpoint {
   Map<String, List<WebSocketSession>> events = {};
   Map<WebSocketSession, String> tokened = {};
   Map<String, int> eventCounts = {};
+  
+  EventEndpoint() {
+    eventEndpoint = this;
+  }
   
   @OnOpen()
   void onOpen(WebSocketSession session) {
@@ -191,7 +197,8 @@ class EventEndpoint {
 @Group("/api/events")
 class EventService {
   @Route("/stats")
-  stats(@Inject() EventEndpoint endpoint) {
+  stats() {
+    var endpoint = eventEndpoint;
     var listeners = {};
     
     for (var event in endpoint.events.keys) {
