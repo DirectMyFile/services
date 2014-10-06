@@ -1,8 +1,7 @@
 part of directcode.services.api;
 
-@Group("/api/events")
 @WebSocketHandler("/api/events/ws")
-class EventService {
+class EventEndpoint {
   Map<String, List<WebSocketSession>> events = {};
   Map<WebSocketSession, String> tokened = {};
   Map<String, int> eventCounts = {};
@@ -179,27 +178,6 @@ class EventService {
     }
   }
   
-  @Route("/stats")
-  stats() {
-    var listeners = {};
-    
-    for (var event in events.keys) {
-      listeners[event] = events[event].length;
-    }
-    
-    var eventz = {};
-    
-    for (var event in eventCounts.keys) {
-      eventz[event] = eventCounts[event];
-    }
-    
-    return {
-      "listeners": listeners,
-      "events": events
-    };
-  }
-  
-  
   @OnClose()
   void onClose(WebSocketSession session) {
     for (var list in events.values) {
@@ -207,5 +185,28 @@ class EventService {
     }
     
     tokened.remove(session);
+  }
+}
+
+@Group("/api/events")
+class EventService {
+  @Route("/stats")
+  stats(@Inject() EventEndpoint endpoint) {
+    var listeners = {};
+    
+    for (var event in endpoint.events.keys) {
+      listeners[event] = endpoint.events[event].length;
+    }
+    
+    var eventz = {};
+    
+    for (var event in endpoint.eventCounts.keys) {
+      eventz[event] = endpoint.eventCounts[event];
+    }
+    
+    return {
+      "listeners": listeners,
+      "events": eventz
+    };
   }
 }
