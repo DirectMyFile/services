@@ -73,6 +73,20 @@ class UserService {
       
       return users.insert(user);
     }).then((_) {
+      
+      var email = new Envelope();
+      
+      email.subject = "DirectCode User Registration";
+      
+      email.recipients.add(registerUser.email);
+      
+      email.text = template("registration_email", {
+        "email": registerUser.email,
+        "username": registerUser.username
+      });
+      
+      emailTransport.send(email);
+      
       return {
         "registered": true
       };

@@ -3,6 +3,8 @@ library directcode.services.common;
 import "dart:io";
 import "dart:convert" show JSON;
 
+import "package:mustache4dart/mustache4dart.dart";
+
 import "package:redstone/server.dart" as app;
 
 import "package:redstone/server.dart" show
@@ -24,6 +26,16 @@ Map<String, dynamic> config;
 
 class RequiresToken {
   const RequiresToken();
+}
+
+String template(String templateName, Map binding) {
+  var file = new File("templates/${templateName}.mustache");
+  
+  if (!file.existsSync()) {
+    throw new ArgumentError("Template does not exist.");
+  }
+  
+  return render(file.readAsStringSync(), binding);
 }
 
 void TokenPlugin(Manager manager) {
