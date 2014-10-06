@@ -49,8 +49,14 @@ class UserCheckSuccess {
   String email;
 }
 
+class UserRegistered {
+  @Field()
+  bool registered = true;
+}
+
 @Group("/api/users")
 class UserService {
+  @Encode()
   @Route("/register", methods: const [POST])
   @RequiresToken()
   register(@Decode() RegisterUser registerUser) {
@@ -58,10 +64,7 @@ class UserService {
       "username": registerUser.username
     }).then((allUsers) {
       if (allUsers.isNotEmpty) {
-        throw new ErrorResponse(400, {
-          "error": "user.exists",
-          "message": "A user with that username already exists."
-        });
+        return new ErrorResponse(400, new APIError("user.exists", "A user with that username already exists."));
       }
       
       var user = new User();
@@ -73,6 +76,8 @@ class UserService {
       
       return users.insert(user);
     }).then((_) {
+      
+      if (_ is ErrorResponse) return _;
       
       var email = new Envelope();
       
@@ -87,9 +92,7 @@ class UserService {
       
       emailTransport.send(email);
       
-      return {
-        "registered": true
-      };
+      return new UserRegistered();
     });
   }
   

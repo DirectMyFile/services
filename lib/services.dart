@@ -6,6 +6,9 @@ import "package:redstone/server.dart" as app;
 @app.Install()
 import "api.dart";
 
+@app.Install()
+import "ui.dart";
+
 void startServices() {
   loadTokens();
   loadConfig();
