@@ -8,6 +8,7 @@ import "common.dart";
 
 part "src/api/members.dart";
 part "src/api/users.dart";
+part "src/api/projects.dart";
 
 SmtpTransport emailTransport;
 

@@ -9,12 +9,15 @@ class User {
   String id;
   
   @Field()
+  @NotEmpty()
   String username;
   
   @Field()
+  @NotEmpty()
   String email;
   
   @Field()
+  @NotEmpty()
   String passwordHash;
   
   bool checkPassword(String password) => hasher.checkPassword(passwordHash, password);
