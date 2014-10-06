@@ -103,9 +103,18 @@ class UserService {
   @Route("/send_email", methods: const [POST])
   sendEmail(@Body(JSON) Map input) {
     var username = input['username'];
+    
+    if (username == null) {
+      return new ErrorResponse(400, new APIError("user.not.specified", "A user is not specified"));
+    }
+    
     var subject = input['subject'];
     var from = input['from'];
     var content = input['body'];
+    
+    if (content == null) {
+      return new ErrorResponse(400, new APIError("body.not.specified", "Email body was not specified"));
+    }
     
     return users.findOne({
       "username": username
