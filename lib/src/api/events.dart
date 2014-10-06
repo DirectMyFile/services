@@ -1,9 +1,11 @@
 part of directcode.services.api;
 
+@Group("/api/events")
 @WebSocketHandler("/api/events/ws")
 class EventService {
   Map<String, List<WebSocketSession>> events = {};
   Map<WebSocketSession, String> tokened = {};
+  Map<String, int> eventCounts = {};
   
   @OnOpen()
   void onOpen(WebSocketSession session) {
@@ -161,6 +163,12 @@ class EventService {
   }
   
   void emit(String eventName, Map data) {
+    if (!eventCounts.containsKey(eventName)) {
+      eventCounts[eventName] = 0;
+    }
+    
+    eventCounts[eventName] = eventCounts[eventName] + 1;
+    
     if (!events.containsKey(eventName)) return;
     for (var session in events[eventName]) {
       sendMessage(session, {
@@ -170,6 +178,29 @@ class EventService {
       });
     }
   }
+  
+  @Route("/stats")
+  stats() {
+    var out =  {
+      "listeners": {},
+      "events": {}
+    };
+    
+    var listeners = out["listeners"];
+    
+    for (var event in events.keys) {
+      listeners[event] = events[event].length;
+    }
+    
+    var eventz = out["events"];
+    
+    for (var event in eventCounts.keys) {
+      eventz[event] = eventCounts[event];
+    }
+    
+    return out;
+  }
+  
   
   @OnClose()
   void onClose(WebSocketSession session) {
