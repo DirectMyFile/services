@@ -1,7 +1,7 @@
 part of directcode.services.api;
 
 @WebSocketHandler("/api/events/ws")
-class EventsEndpoint {
+class EventService {
   Map<String, List<WebSocketSession>> events = {};
   Map<WebSocketSession, String> tokened = {};
   
