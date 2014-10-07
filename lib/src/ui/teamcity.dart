@@ -1,10 +1,14 @@
 part of directcode.services.ui;
 
-const String TEAMCITY_BUILD_STATUS_URL = "http://ci.directcode.org/app/rest/builds/buildType:(id:@)/statusIcon";
+const String teamcityBuildStatusUrl = "http://ci.directcode.org/app/rest/builds/buildType:(id:@)/statusIcon";
+
+final File teamcityTempFile = new File("${Directory.systemTemp.path}/teamcity-status.png");
 
 @Route("/teamcity/buildStatus/:build.png")
 buildStatusImage(String build) {
-  var url = TEAMCITY_BUILD_STATUS_URL.replaceAll("@", build);
+  var url = teamcityBuildStatusUrl.replaceAll("@", build);
+  
+  var bytes;
   
   return httpClient.get(url).then((clientResponse) {
     
@@ -12,16 +16,14 @@ buildStatusImage(String build) {
       return new ErrorResponse(404, "Not Found");
     }
     
-    var bytes = clientResponse.bodyBytes;
-    
-    var temp = Directory.systemTemp;
-    
-    var file = new File("${temp.path}/teamcity-status.png");
-    
-    if (file.existsSync()) file.deleteSync();
-    
-    file.writeAsBytesSync(bytes);
-    
-    return file;
+    bytes = clientResponse.bodyBytes;
+        
+    return teamcityTempFile.exists();
+  }).then((exists) {
+    if (exists) {
+      return teamcityTempFile.delete();
+    }
+  }).then((_) {
+    return teamcityTempFile.writeAsBytes(bytes);
   });
 }
