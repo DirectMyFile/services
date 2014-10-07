@@ -14,7 +14,7 @@ class ProjectDescriptor {
 
 class Project {
   @Id()
-  String id;
+  String _id;
   
   @Field()
   @NotEmpty()
