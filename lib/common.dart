@@ -7,6 +7,8 @@ import "package:mustache4dart/mustache4dart.dart";
 
 import "package:redstone/server.dart" as app;
 
+import "package:http/http.dart" as http;
+
 import "package:redstone/server.dart" show
   Route, Group, Attr, Interceptor, QueryParam, ErrorHandler, DefaultRoute, Body, GET, POST, PUT, DELETE, ErrorResponse, RedstonePlugin, Manager;
 
@@ -22,6 +24,9 @@ export "package:redstone/server.dart" show
 
 bool useTokenFile = true;
 List<String> tokens;
+
+
+http.Client httpClient = new http.Client();
 
 Map<String, dynamic> config;
 
