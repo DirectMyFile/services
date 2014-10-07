@@ -8,7 +8,7 @@ var userValidator = new Validator(User, true);
 
 class User {
   @Id()
-  String id;
+  String _id;
   
   @Field()
   @NotEmpty()

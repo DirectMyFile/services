@@ -4,7 +4,7 @@ MongoDbService<Member> members = new MongoDbService<Member>("members");
 
 class Member {
   @Id()
-  String id;
+  String _id;
   
   @Field()
   String name;
