@@ -34,7 +34,7 @@ Map<String, dynamic> config;
 
 final Random random = new Random();
 
-String template(String templateName, Map binding) {
+String template(String templateName, binding) {
   var file = new File("templates/${templateName}.mustache");
   
   if (!file.existsSync()) {
