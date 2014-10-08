@@ -14,7 +14,7 @@ $("#form").on("submit", function() {
       email: email
     }),
     headers: {
-      "X-DirectCode-Token": "abcdefg",
+      "X-DirectCode-Token": "user_register_page",
       "Content-Type": "application/json"
     },
     success: function(data) {
