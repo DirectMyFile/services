@@ -36,12 +36,12 @@ class ProjectService {
   listProjects() =>
       projects.find();
   
-  @RequiresToken()
+  @RequiresToken(permissions: const ["projects.add"])
   @Route("/add", methods: const [POST])
   addProject(@Decode() Project project) =>
       projects.insert(project);
   
-  @RequiresToken()
+  @RequiresToken(permissions: const ["project.remove"])
   @Route("/remove", methods: const [POST])
   removeProject(@Decode() ProjectDescriptor project) =>
       projects.remove(project.toSelector());

@@ -17,12 +17,12 @@ class MemberService {
   listMembers() =>
       members.find();
   
-  @RequiresToken()
+  @RequiresToken(permissions: const ["members.add"])
   @Route("/add", methods: const [POST])
   addMember(@Decode() Member member) =>
       members.insert(member);
   
-  @RequiresToken()
+  @RequiresToken(permissions: const ["members.remove"])
   @Route("/remove", methods: const [POST])
   removeMember(@Decode() Member member) =>
       members.remove(member);

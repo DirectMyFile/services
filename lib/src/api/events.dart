@@ -16,7 +16,7 @@ class EventEndpoint {
   @OnOpen()
   void onOpen(WebSocketSession session) {
     sendMessage(session, {
-      "type": "ready"
+      "type": "connect"
     });
   }
 
@@ -40,7 +40,7 @@ class EventEndpoint {
 
     String type = json['type'];
 
-    if (type == "token") {
+    if (type == "connect") {
       var token = json['token'];
 
       if (token == null) {
@@ -52,7 +52,7 @@ class EventEndpoint {
         return;
       }
 
-      if (!tokens.contains(token)) {
+      if (!tokens.containsKey(token)) {
         sendMessage(session, {
           "type": "error",
           "error": "token.invalid",
@@ -60,8 +60,22 @@ class EventEndpoint {
         });
         return;
       }
+      
+      if (!hasPermission(token, "events.${type}")) {
+        sendMessage(session, {
+          "type": "error",
+          "error": "token.no.permission",
+          "message": "token does not have permission to access events"
+        });
+        return;
+      }
 
       tokened[session] = token;
+      
+      sendMessage(session, {
+        "type": "ready",
+        "permissions": tokens[token]
+      });
 
       return;
     }
@@ -75,11 +89,29 @@ class EventEndpoint {
       return;
     }
 
-    if (!tokens.contains(tokened[session])) {
+    if (!tokens.containsKey(tokened[session])) {
       sendMessage(session, {
         "type": "error",
         "error": "token.revoked",
         "message": "the token you provided has been revoked"
+      });
+      return;
+    }
+    
+    if (!tokens.containsKey(tokened[session])) {
+      sendMessage(session, {
+        "type": "error",
+        "error": "token.revoked",
+        "message": "the token you provided has been revoked"
+      });
+      return;
+    }
+    
+    if (!hasPermission(tokened[session], "event.${type}")) {
+      sendMessage(session, {
+        "type": "error",
+        "error": "token.no.permission",
+        "message": "the token you provided does not have permission to use that"
       });
       return;
     }

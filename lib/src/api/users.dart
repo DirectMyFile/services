@@ -63,7 +63,7 @@ class UserRegistered {
 class UserService {
   @Encode()
   @Route("/register", methods: const [POST])
-  @RequiresToken()
+  @RequiresToken(permissions: const ["users.register"])
   register(@Decode() RegisterUser registerUser) {
     return users.find({
       "username": registerUser.username
@@ -107,7 +107,7 @@ class UserService {
   list() =>
       users.find();
   
-  @RequiresToken()
+  @RequiresToken(permissions: const ["users.email.send"])
   @Route("/send_email", methods: const [POST])
   sendEmail(@Body(JSON) Map input) {
     var username = input['username'];
@@ -146,7 +146,7 @@ class UserService {
   }
   
   @Encode()
-  @RequiresToken()
+  @RequiresToken(permissions: const ["users.check"])
   @Route("/check", methods: const [POST])
   check(@Decode() CheckUser info) {
     return users.find({
