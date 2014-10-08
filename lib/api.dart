@@ -12,6 +12,7 @@ part "src/api/members.dart";
 part "src/api/users.dart";
 part "src/api/projects.dart";
 part "src/api/events.dart";
+part "src/api/zen.dart";
 
 SmtpTransport emailTransport;
 

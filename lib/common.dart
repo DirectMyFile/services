@@ -9,6 +9,8 @@ import "package:redstone/server.dart" as app;
 
 import "package:http/http.dart" as http;
 
+import "dart:math" show Random;
+
 import "package:redstone/server.dart" show
   Route, Group, Attr, Interceptor, QueryParam, ErrorHandler, DefaultRoute, Body, GET, POST, PUT, DELETE, ErrorResponse, RedstonePlugin, Manager;
 
@@ -29,6 +31,8 @@ part "src/common/tokens.dart";
 http.Client httpClient = new http.Client();
 
 Map<String, dynamic> config;
+
+final Random random = new Random();
 
 String template(String templateName, Map binding) {
   var file = new File("templates/${templateName}.mustache");
