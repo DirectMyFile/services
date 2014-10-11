@@ -9,6 +9,5 @@ dartdoc-viewer/
 .buildlog
 .pub
 out/
-*.iml
 tokens.json
 config.json
