@@ -29,7 +29,7 @@ class Project {
   String url;
 }
 
-@Group("/api/projects")
+@Group("/projects")
 class ProjectService {
   @Encode()
   @Route("/list")

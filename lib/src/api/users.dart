@@ -59,7 +59,7 @@ class UserRegistered {
   bool registered = true;
 }
 
-@Group("/api/users")
+@Group("/users")
 class UserService {
   @Encode()
   @Route("/register", methods: const [POST])

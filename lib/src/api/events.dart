@@ -2,7 +2,7 @@ part of directcode.services.api;
 
 EventEndpoint eventEndpoint;
 
-@WebSocketHandler("/api/events/ws")
+@WebSocketHandler("/events/ws")
 class EventEndpoint {
   Map<String, List<WebSocketSession>> events = {};
   Map<WebSocketSession, String> tokened = {};
@@ -236,7 +236,7 @@ class EventEndpoint {
   }
 }
 
-@Group("/api/events")
+@Group("/events")
 class EventService {
   @Route("/stats")
   stats() {

@@ -10,7 +10,7 @@ class Member {
   String name;
 }
 
-@Group("/api/members")
+@Group("/members")
 class MemberService {
   @Encode()
   @Route("/list")

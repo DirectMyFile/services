@@ -5,7 +5,7 @@ import "package:redstone/server.dart" as app;
 
 import "package:logging/logging.dart";
 
-@Install()
+@Install(urlPrefix: "/api")
 import "api.dart";
 
 @Install()
