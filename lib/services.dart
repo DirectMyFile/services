@@ -3,8 +3,6 @@ library directcode.services;
 import "common.dart";
 import "package:redstone/server.dart" as app;
 
-import "package:logging/logging.dart";
-
 @Install(urlPrefix: "/api")
 import "api.dart";
 

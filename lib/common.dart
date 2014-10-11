@@ -14,6 +14,8 @@ import "dart:math" show Random;
 import "package:redstone/server.dart" show
   Route, Group, Attr, Interceptor, QueryParam, ErrorHandler, DefaultRoute, Body, GET, POST, PUT, DELETE, ErrorResponse, RedstonePlugin, Manager;
 
+import "package:logging/logging.dart";
+
 import "package:quiver/collection.dart";
 
 export 'package:redstone_mapper/mapper.dart';
@@ -29,6 +31,8 @@ export "package:redstone/server.dart" show
 part "src/common/tokens.dart";
 
 http.Client httpClient = new http.Client();
+
+Logger logger = new Logger("Services");
 
 Map<String, dynamic> config;
 
