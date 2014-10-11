@@ -16,7 +16,7 @@ import "package:redstone/server.dart" show
 
 import "package:logging/logging.dart";
 
-import "package:googleapis/drive/v2.dart";
+import "package:googleapis/drive/v2.dart" as drive;
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:googleapis_auth/auth.dart';
 

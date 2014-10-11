@@ -1,7 +1,7 @@
 part of directcode.services.common;
 
 final List<String> GOOGLE_SCOPES = [
-  DriveApi.DriveReadonlyScope
+  drive.DriveApi.DriveReadonlyScope
 ];
 AccessCredentials GOOGLE_CRED;
 
