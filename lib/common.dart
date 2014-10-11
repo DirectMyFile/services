@@ -15,6 +15,8 @@ import "package:redstone/server.dart" show
   Route, Group, Attr, Interceptor, QueryParam, ErrorHandler, DefaultRoute, Body, GET, POST, PUT, DELETE, ErrorResponse, RedstonePlugin, Manager;
 
 import "package:logging/logging.dart";
+
+import "package:googleapis/drive/v2.dart";
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:googleapis_auth/auth.dart';
 
