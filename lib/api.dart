@@ -18,24 +18,25 @@ part "src/api/projects.dart";
 part "src/api/events.dart";
 part "src/api/teamcity.dart";
 part "src/api/zen.dart";
+part "src/api/internal.dart";
 
 SmtpTransport emailTransport;
 
 void setupAPI() {
   var options = new GmailSmtpOptions();
-  
+
   options.username = config['gmail_username'];
   options.password = config['gmail_password'];
-  
+
   emailTransport = new SmtpTransport(options);
 }
 
 class APIError {
   APIError(this.error, this.message);
-  
+
   @Field()
   String error;
-  
+
   @Field()
   String message;
 }
