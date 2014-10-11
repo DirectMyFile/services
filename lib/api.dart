@@ -29,6 +29,8 @@ void setupAPI() {
   options.password = config['gmail_password'];
 
   emailTransport = new SmtpTransport(options);
+
+  setupGoogleAPIS();
 }
 
 class APIError {

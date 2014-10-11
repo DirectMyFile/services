@@ -12,9 +12,11 @@ import "package:http/http.dart" as http;
 import "dart:math" show Random;
 
 import "package:redstone/server.dart" show
-Route, Group, Attr, Interceptor, QueryParam, ErrorHandler, DefaultRoute, Body, GET, POST, PUT, DELETE, ErrorResponse, RedstonePlugin, Manager;
+  Route, Group, Attr, Interceptor, QueryParam, ErrorHandler, DefaultRoute, Body, GET, POST, PUT, DELETE, ErrorResponse, RedstonePlugin, Manager;
 
 import "package:logging/logging.dart";
+import 'package:googleapis_auth/auth_io.dart';
+import 'package:googleapis_auth/auth.dart';
 
 import "package:quiver/collection.dart";
 
@@ -32,3 +34,4 @@ part "src/common/tokens.dart";
 part "src/common/asset.dart";
 part "src/common/base.dart";
 part "src/common/config.dart";
+part "src/common/google.dart";

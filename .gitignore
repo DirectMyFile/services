@@ -11,3 +11,4 @@ dartdoc-viewer/
 out/
 tokens.json
 config.json
+google_key.json
