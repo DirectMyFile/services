@@ -8,7 +8,7 @@ const List<String> _ZENS = const [
   "Don't be afraid to fail.",
   "Practicality beats purity.",
   "Make mistakes, and learn from them.",
-  "Rewrite only when you need to.",
+  "Do not be afraid to rewrite something, if it is for a better cause.",
   "Innovation is just as good as invention.",
   "Shoot for the best and you get the rest."
 ]; 
