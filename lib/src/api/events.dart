@@ -6,10 +6,13 @@ EventEndpoint eventEndpoint;
 class EventEndpoint {
   Map<String, List<WebSocketSession>> events = {
   };
+
   Map<WebSocketSession, String> tokened = {
   };
+
   Map<String, int> eventCounts = {
   };
+
   List<WebSocketSession> globalListeners = [];
 
   EventEndpoint() {
@@ -88,15 +91,6 @@ class EventEndpoint {
           "type": "error",
           "error": "token.not.provided",
           "message": "a token has not been provided"
-      });
-      return;
-    }
-
-    if (!tokens.containsKey(tokened[session])) {
-      sendMessage(session, {
-          "type": "error",
-          "error": "token.revoked",
-          "message": "the token you provided has been revoked"
       });
       return;
     }
