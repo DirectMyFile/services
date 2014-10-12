@@ -12,9 +12,9 @@ import "ui.dart";
 void startServices() {
   loadTokens();
   loadConfig();
-  
+
   setupAPI();
-  
+
   var dbManager = new MongoDbManager("mongodb://localhost/services", poolSize: 3);
 
   app.addPlugin(getMapperPlugin(dbManager));
@@ -22,8 +22,8 @@ void startServices() {
   app.addPlugin(getWebSocketPlugin());
   app.addPlugin(ServicesPlugin);
   app.setupConsoleLog();
-  
+
   var port = config.containsKey("port") ? config['port'] : 8080;
-  
+
   app.start(port: port);
 }

@@ -4,9 +4,12 @@ EventEndpoint eventEndpoint;
 
 @WebSocketHandler("/events/ws")
 class EventEndpoint {
-  Map<String, List<WebSocketSession>> events = {};
-  Map<WebSocketSession, String> tokened = {};
-  Map<String, int> eventCounts = {};
+  Map<String, List<WebSocketSession>> events = {
+  };
+  Map<WebSocketSession, String> tokened = {
+  };
+  Map<String, int> eventCounts = {
+  };
   List<WebSocketSession> globalListeners = [];
 
   EventEndpoint() {
@@ -16,7 +19,7 @@ class EventEndpoint {
   @OnOpen()
   void onOpen(WebSocketSession session) {
     sendMessage(session, {
-      "type": "connect"
+        "type": "connect"
     });
   }
 
@@ -31,9 +34,9 @@ class EventEndpoint {
 
     if (json['type'] == null) {
       sendMessage(session, {
-        "type": "error",
-        "error": "type.missing",
-        "message": "type is missing"
+          "type": "error",
+          "error": "type.missing",
+          "message": "type is missing"
       });
       return;
     }
@@ -45,36 +48,36 @@ class EventEndpoint {
 
       if (token == null) {
         sendMessage(session, {
-          "type": "error",
-          "error": "token.missing",
-          "message": "token is missing"
+            "type": "error",
+            "error": "token.missing",
+            "message": "token is missing"
         });
         return;
       }
 
       if (!tokens.containsKey(token)) {
         sendMessage(session, {
-          "type": "error",
-          "error": "token.invalid",
-          "message": "token is invalid"
+            "type": "error",
+            "error": "token.invalid",
+            "message": "token is invalid"
         });
         return;
       }
-      
+
       if (!hasPermission(token, "events.${type}")) {
         sendMessage(session, {
-          "type": "error",
-          "error": "token.no.permission",
-          "message": "token does not have permission to access events"
+            "type": "error",
+            "error": "token.no.permission",
+            "message": "token does not have permission to access events"
         });
         return;
       }
 
       tokened[session] = token;
-      
+
       sendMessage(session, {
-        "type": "ready",
-        "permissions": tokens[token]
+          "type": "ready",
+          "permissions": tokens[token]
       });
 
       return;
@@ -82,36 +85,36 @@ class EventEndpoint {
 
     if (!tokened.containsKey(session)) {
       sendMessage(session, {
-        "type": "error",
-        "error": "token.not.provided",
-        "message": "a token has not been provided"
+          "type": "error",
+          "error": "token.not.provided",
+          "message": "a token has not been provided"
       });
       return;
     }
 
     if (!tokens.containsKey(tokened[session])) {
       sendMessage(session, {
-        "type": "error",
-        "error": "token.revoked",
-        "message": "the token you provided has been revoked"
+          "type": "error",
+          "error": "token.revoked",
+          "message": "the token you provided has been revoked"
       });
       return;
     }
-    
+
     if (!tokens.containsKey(tokened[session])) {
       sendMessage(session, {
-        "type": "error",
-        "error": "token.revoked",
-        "message": "the token you provided has been revoked"
+          "type": "error",
+          "error": "token.revoked",
+          "message": "the token you provided has been revoked"
       });
       return;
     }
-    
+
     if (!hasPermission(tokened[session], "event.${type}")) {
       sendMessage(session, {
-        "type": "error",
-        "error": "token.no.permission",
-        "message": "the token you provided does not have permission to use that"
+          "type": "error",
+          "error": "token.no.permission",
+          "message": "the token you provided does not have permission to use that"
       });
       return;
     }
@@ -121,9 +124,9 @@ class EventEndpoint {
 
       if (event == null) {
         sendMessage(session, {
-          "type": "error",
-          "error": "event.missing",
-          "message": "event is missing"
+            "type": "error",
+            "error": "event.missing",
+            "message": "event is missing"
         });
         return;
       }
@@ -132,9 +135,9 @@ class EventEndpoint {
 
       if (list.contains(session) || globalListeners.contains(session)) {
         sendMessage(session, {
-          "type": "error",
-          "error": "event.already.registered",
-          "message": "you have already been registered for this event"
+            "type": "error",
+            "error": "event.already.registered",
+            "message": "you have already been registered for this event"
         });
         return;
       }
@@ -142,17 +145,17 @@ class EventEndpoint {
       list.add(session);
 
       sendMessage(session, {
-        "type": "registered",
-        "event": event
+          "type": "registered",
+          "event": event
       });
     } else if (type == "unregister") {
       var event = json['event'];
 
       if (event == null) {
         sendMessage(session, {
-          "type": "error",
-          "error": "event.missing",
-          "message": "event is missing"
+            "type": "error",
+            "error": "event.missing",
+            "message": "event is missing"
         });
         return;
       }
@@ -161,9 +164,9 @@ class EventEndpoint {
 
       if (!list.contains(session)) {
         sendMessage(session, {
-          "type": "error",
-          "error": "event.not.registered",
-          "message": "you have not been registered for this event"
+            "type": "error",
+            "error": "event.not.registered",
+            "message": "you have not been registered for this event"
         });
         return;
       }
@@ -171,31 +174,32 @@ class EventEndpoint {
       list.remove(session);
 
       sendMessage(session, {
-        "type": "unregistered",
-        "event": event
+          "type": "unregistered",
+          "event": event
       });
     } else if (type == "emit") {
       var event = json['event'];
 
       if (event == null) {
         sendMessage(session, {
-          "type": "error",
-          "error": "event.missing",
-          "message": "event is missing"
+            "type": "error",
+            "error": "event.missing",
+            "message": "event is missing"
         });
         return;
       }
 
       var data = json['data'];
 
-      if (data == null) data = {};
+      if (data == null) data = {
+      };
 
       emit(event, data);
     } else {
       sendMessage(session, {
-        "type": "error",
-        "error": "type.illegal",
-        "message": "illegal type given"
+          "type": "error",
+          "error": "type.illegal",
+          "message": "illegal type given"
       });
     }
   }
@@ -210,15 +214,15 @@ class EventEndpoint {
     if (!events.containsKey(eventName)) return;
 
     var msg = {
-      "type": "event",
-      "event": eventName,
-      "data": data
+        "type": "event",
+        "event": eventName,
+        "data": data
     };
 
     for (var session in events[eventName]) {
       sendMessage(session, msg);
     }
-    
+
     for (var session in globalListeners) {
       sendMessage(session, msg);
     }
@@ -229,7 +233,7 @@ class EventEndpoint {
     for (var list in events.values) {
       list.remove(session);
     }
-    
+
     globalListeners.remove(session);
 
     tokened.remove(session);
@@ -241,21 +245,23 @@ class EventService {
   @Route("/stats")
   stats() {
     var endpoint = eventEndpoint;
-    var listeners = {};
+    var listeners = {
+    };
 
     for (var event in endpoint.events.keys) {
       listeners[event] = endpoint.events[event].length;
     }
 
-    var eventz = {};
+    var eventz = {
+    };
 
     for (var event in endpoint.eventCounts.keys) {
       eventz[event] = endpoint.eventCounts[event];
     }
 
     return {
-      "listeners": listeners,
-      "events": eventz
+        "listeners": listeners,
+        "events": eventz
     };
   }
 }

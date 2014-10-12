@@ -7,7 +7,7 @@ class InternalService {
   server() {
     return {
         "vm": {
-          "version": Platform.version
+            "version": Platform.version
         },
         "hostname": Platform.localHostname
     };

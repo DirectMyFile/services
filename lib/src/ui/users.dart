@@ -4,7 +4,7 @@ part of directcode.services.ui;
 class UserPages {
   @Route("/register")
   registerPage() => www("users/register.html");
-  
+
   @Route("/register.js")
   registerPageJavaScript() => www("users/register.js");
 }
