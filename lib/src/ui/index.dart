@@ -1,6 +1,5 @@
 part of directcode.services.ui;
 
+@Markdown(title: "DirectCode Services")
 @Route("/", responseType: "text/html")
-index() {
-  return markdownToHtml(www("index.md").readAsStringSync());
-}
+index() => www("index.md");
