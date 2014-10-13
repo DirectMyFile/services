@@ -16,18 +16,18 @@ void TokenPlugin(Manager manager) {
 
     if (token == null) {
       app.chain.interrupt(statusCode: HttpStatus.UNAUTHORIZED, responseValue: {
-          "error": "token.required",
-          "message": "A token is required to use this API."
+        "error": "token.required",
+        "message": "A token is required to use this API."
       });
     } else if (!tokens.containsKey(token)) {
       app.chain.interrupt(statusCode: HttpStatus.UNAUTHORIZED, responseValue: {
-          "error": "token.invalid",
-          "message": "The token that was provided is invalid."
+        "error": "token.invalid",
+        "message": "The token that was provided is invalid."
       });
     } else if (!hasPermissions(token, info.permissions)) {
       app.chain.interrupt(statusCode: HttpStatus.UNAUTHORIZED, responseValue: {
-          "error": "token.permission.missing",
-          "message": "The token that was provided does not have the required permissions to use this API."
+        "error": "token.permission.missing",
+        "message": "The token that was provided does not have the required permissions to use this API."
       });
     } else {
       return route(pathSegments, injector, request);
@@ -57,8 +57,7 @@ void loadTokens() {
   }
 }
 
-bool hasPermissions(String token, List<String> perms) =>
-perms.any((perm) => hasPermission(token, perm));
+bool hasPermissions(String token, List<String> perms) => perms.any((perm) => hasPermission(token, perm));
 
 bool hasPermission(String token, String perm) {
   var allPerms = tokens[token];
@@ -75,9 +74,9 @@ bool hasPermission(String token, String perm) {
 
   for (var part in parts) {
     builder
-      ..writeAll(previous, ".")
-      ..write(".")
-      ..write(part);
+        ..writeAll(previous, ".")
+        ..write(".")
+        ..write(part);
     previous.add(part);
 
     var perm = builder.toString();

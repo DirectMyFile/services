@@ -3,8 +3,7 @@ part of directcode.services.api;
 @Group("/teamcity")
 class TeamCityService {
 
-  HttpClient client = new HttpClient()
-    ..addCredentials(Uri.parse(url), "TeamCity", new HttpClientBasicCredentials(username, password));
+  HttpClient client = new HttpClient()..addCredentials(Uri.parse(url), "TeamCity", new HttpClientBasicCredentials(username, password));
 
   static String get url => config['teamcity_url'] + "/httpAuth/app/rest/latest";
 
@@ -28,11 +27,11 @@ class TeamCityService {
   version() {
     return getJSON("/server").then((response) {
       return {
-          "full_version": response['version'],
-          "major": response['versionMajor'],
-          "minor": response['versionMinor'],
-          "build_number": response['buildNumber'],
-          "build_date": response['buildDate']
+        "full_version": response['version'],
+        "major": response['versionMajor'],
+        "minor": response['versionMinor'],
+        "build_number": response['buildNumber'],
+        "build_date": response['buildDate']
       };
     });
   }
@@ -45,10 +44,10 @@ class TeamCityService {
 
       for (var prj in projects) {
         list.add({
-            "id": prj['id'],
-            "name": prj['name'],
-            "description": prj['description'],
-            "url": prj['webUrl']
+          "id": prj['id'],
+          "name": prj['name'],
+          "description": prj['description'],
+          "url": prj['webUrl']
         });
       }
 

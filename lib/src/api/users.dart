@@ -66,7 +66,7 @@ class UserService {
   @RequiresToken(permissions: const ["users.register"])
   register(@Decode() RegisterUser registerUser) {
     return users.find({
-        "username": registerUser.username
+      "username": registerUser.username
     }).then((allUsers) {
       if (allUsers.isNotEmpty) {
         return new ErrorResponse(400, new APIError("user.exists", "A user with that username already exists."));
@@ -91,8 +91,8 @@ class UserService {
       email.recipients.add(registerUser.email);
 
       email.text = template("registration_email", {
-          "email": registerUser.email,
-          "username": registerUser.username
+        "email": registerUser.email,
+        "username": registerUser.username
       });
 
       emailTransport.send(email);
@@ -104,8 +104,7 @@ class UserService {
   /*@Encode()
   @RequiresToken()
   @Route("/list")*/
-  list() =>
-  users.find();
+  list() => users.find();
 
   @RequiresToken(permissions: const ["users.email.send"])
   @Route("/send_email", methods: const [POST])
@@ -125,7 +124,7 @@ class UserService {
     }
 
     return users.findOne({
-        "username": username
+      "username": username
     }).then((user) {
       var email = new Envelope();
 
@@ -138,7 +137,7 @@ class UserService {
       return emailTransport.send(email);
     }).then((_) {
       return {
-          "sent": true
+        "sent": true
       };
     }).catchError((e) {
       return new ErrorResponse(404, new APIError("user.not.found", "User not found."));
@@ -150,7 +149,7 @@ class UserService {
   @Route("/check", methods: const [POST])
   check(@Decode() CheckUser info) {
     return users.find({
-        "username": info.username
+      "username": info.username
     }).then((userz) {
       if (userz.isNotEmpty) {
         var user = userz.first;
