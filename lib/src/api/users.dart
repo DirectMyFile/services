@@ -90,7 +90,7 @@ class UserService {
 
       email.recipients.add(registerUser.email);
 
-      email.text = template("registration_email", {
+      email.html = template("registration_email", {
         "email": registerUser.email,
         "username": registerUser.username
       });
