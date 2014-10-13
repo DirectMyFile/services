@@ -2,4 +2,7 @@
 
 The DirectCode Services
 
-[User Registration](/users/register)
+
+## Pages
+
+- [User Registration](/users/register)
