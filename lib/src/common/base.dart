@@ -22,9 +22,14 @@ void ServicesPlugin(Manager manager) {
       throw new ArgumentError("Can't create markdown from the routes return type!");
     }
 
+    var out = markdownToHtml(render(str, {
+      "title": metadata.title,
+      "request": app.request
+    }));
+    
     return template("markdown", {
       "title": metadata.title,
-      "content": markdownToHtml(str)
+      "content": out
     });
   }, includeGroups: true);
 }
