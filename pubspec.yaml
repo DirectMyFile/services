@@ -7,11 +7,7 @@ dependencies:
   markd: '>=0.7.1 <0.8.0'
   mustache4dart: '>=1.0.6 <2.0.0'
   password_hasher: '>=0.2.0 <0.3.0'
-  redstone: '>=0.5.16 <0.6.0'
-  redstone_mapper:
-    git: git://github.com/kaendfinger/redstone_mapper.git
-  redstone_mapper_mongo:
-    git:
-      ref: service
-      url: git://github.com/kaendfinger/redstone_mapper_mongo.git
+  redstone: '>=0.5.18 <0.6.0'
+  redstone_mapper: '>=0.1.9 <0.2.0'
+  redstone_mapper_mongo: '>=0.1.1+1 <0.2.0'
   redstone_web_socket: '>=0.0.1 <0.1.0'
