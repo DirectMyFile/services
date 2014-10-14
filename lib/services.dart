@@ -10,11 +10,8 @@ import "api.dart";
 import "ui.dart";
 
 void startServices() {
-  loadTokens();
   loadConfig();
-
-  setupAPI();
-
+  
   var dbManager = new MongoDbManager("mongodb://localhost/services", poolSize: 3);
 
   app.addPlugin(getMapperPlugin(dbManager));

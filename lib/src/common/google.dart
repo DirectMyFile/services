@@ -3,7 +3,7 @@ part of directcode.services.common;
 final List<String> GOOGLE_SCOPES = [drive.DriveApi.DriveReadonlyScope];
 AccessCredentials GOOGLE_CRED;
 
-
+@Setup
 void setupGoogleAPIS() {
   var file = new File("google_key.json");
 

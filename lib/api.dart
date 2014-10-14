@@ -22,6 +22,7 @@ part "src/api/internal.dart";
 
 SmtpTransport emailTransport;
 
+@Setup
 void setupAPI() {
   var options = new GmailSmtpOptions();
 
@@ -29,8 +30,6 @@ void setupAPI() {
   options.password = config['gmail_password'];
 
   emailTransport = new SmtpTransport(options);
-
-  setupGoogleAPIS();
 }
 
 class APIError {

@@ -10,7 +10,31 @@ class Markdown {
   const Markdown({this.title: "No Title"});
 }
 
+class SetupMethod {
+  const SetupMethod();
+}
+
+class PluginMethod {
+  const PluginMethod();
+}
+
+const SetupMethod Setup = const SetupMethod();
+const PluginMethod Plugin = const PluginMethod();
+
 void ServicesPlugin(Manager manager) {
+  var setupMethods = manager.findFunctions(SetupMethod);
+  var pluginMethods = manager.findFunctions(PluginMethod);
+  
+  for (var setupMethod in setupMethods) {
+    var owner = setupMethod.mirror.owner as LibraryMirror;
+    owner.invoke(setupMethod.mirror.simpleName, []);
+  }
+  
+  for (var pluginMethod in pluginMethods) {
+    var owner = pluginMethod.mirror.owner as LibraryMirror;
+    owner.invoke(pluginMethod.mirror.simpleName, [manager]);
+  }
+  
   manager.addResponseProcessor(Markdown, (Markdown metadata, handlerName, value, injector) {
     String str;
 
