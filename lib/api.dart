@@ -23,7 +23,9 @@ part "src/api/internal.dart";
 SmtpTransport emailTransport;
 
 @Setup
-void setupAPI() {
+void setupGmail() {
+  print("Setting Up Gmail");
+  
   var options = new GmailSmtpOptions();
 
   options.username = config['gmail_username'];
