@@ -24,8 +24,6 @@ SmtpTransport emailTransport;
 
 @Setup
 void setupGmail() {
-  print("Setting Up Gmail");
-  
   var options = new GmailSmtpOptions();
 
   options.username = config['gmail_username'];
