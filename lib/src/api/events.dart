@@ -253,3 +253,7 @@ class EventService {
     };
   }
 }
+
+void emit(String event, Map data) {
+  eventEndpoint.emit(event, data);
+}

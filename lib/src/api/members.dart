@@ -18,9 +18,15 @@ class MemberService {
 
   @RequiresToken(permissions: const ["members.add"])
   @Route("/add", methods: const [POST])
-  addMember(@Decode() Member member) => members.insert(member);
+  addMember(@Decode() Member member) {
+    emit("members.added", encode(member));
+    members.insert(member);
+  }
 
   @RequiresToken(permissions: const ["members.remove"])
   @Route("/remove", methods: const [POST])
-  removeMember(@Decode() Member member) => members.remove(member);
+  removeMember(@Decode() Member member) {
+    emit("members.removed", encode(member));
+    members.remove(member);
+  }
 }

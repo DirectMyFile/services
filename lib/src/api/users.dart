@@ -65,6 +65,7 @@ class UserService {
   @Route("/register", methods: const [POST])
   @RequiresToken(permissions: const ["users.register"])
   register(@Decode() RegisterUser registerUser) {
+    User user;
     return users.find({
       "username": registerUser.username
     }).then((allUsers) {
@@ -72,7 +73,7 @@ class UserService {
         return new ErrorResponse(400, new APIError("user.exists", "A user with that username already exists."));
       }
 
-      var user = new User();
+      user = new User();
       var passwordHash = hasher.hashPassword(registerUser.password);
 
       user.username = registerUser.username;
@@ -96,6 +97,8 @@ class UserService {
       });
 
       emailTransport.send(email);
+
+      emit("user.registered", encode(user));
 
       return new UserRegistered();
     });

@@ -37,9 +37,15 @@ class ProjectService {
 
   @RequiresToken(permissions: const ["projects.add"])
   @Route("/add", methods: const [POST])
-  addProject(@Decode() Project project) => projects.insert(project);
+  addProject(@Decode() Project project) {
+    emit("projects.added", encode(project));
+    projects.insert(project);
+  }
 
   @RequiresToken(permissions: const ["project.remove"])
   @Route("/remove", methods: const [POST])
-  removeProject(@Decode() ProjectDescriptor project) => projects.remove(project.toSelector());
+  removeProject(@Decode() ProjectDescriptor project) {
+    emit("projects.removed", encode(project));
+    projects.remove(project.toSelector());
+  }
 }
