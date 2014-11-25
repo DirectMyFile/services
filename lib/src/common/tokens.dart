@@ -92,3 +92,51 @@ bool hasPermission(String token, String perm) {
 
   return false;
 }
+
+String generateToken({int length: 30}) {
+  var buffer = new StringBuffer();
+  for (int i = 1; i <= length; i++) {
+    if (random.nextBool()) {
+      buffer.write(alphabet[random.nextInt(alphabet.length)]);
+    } else {
+      buffer.write(numbers[random.nextInt(numbers.length)]);
+    }
+  }
+  return buffer.toString();
+}
+
+class TokenManager {
+  Map<String, List<String>> allTokens = {};
+
+  TokenManager();
+
+  void load({String path: "tokens.json"}) {
+    var file = new File(path);
+    var data = file.readAsStringSync();
+    allTokens = JSON.decode(data);
+  }
+
+  void addToken(String token, {List<String> permissions: const []}) {
+    allTokens[token] = permissions;
+  }
+
+  void removeToken(String token) {
+    allTokens.remove(token);
+  }
+
+  void addPermission(String token, String permission) {
+    allTokens[token].add(permission);
+  }
+
+  void removePermission(String token, String permission) {
+    allTokens[token].remove(permission);
+  }
+
+  void save({String path: "tokens.json"}) {
+    var file = new File(path);
+    file.writeAsStringSync(new Convert.JsonEncoder.withIndent("  ").convert(allTokens));
+  }
+}
+
+const List<String> alphabet = const ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+const List<String> numbers = const [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];

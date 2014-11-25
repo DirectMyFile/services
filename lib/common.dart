@@ -2,6 +2,7 @@ library directcode.services.common;
 
 import "dart:io";
 import "dart:convert" show JSON;
+import "dart:convert" as Convert;
 
 import "package:mustache4dart/mustache4dart.dart";
 
