@@ -11,3 +11,4 @@ dependencies:
   redstone_mapper: '>=0.1.9 <0.2.0'
   redstone_mapper_mongo: '>=0.1.1+1 <0.2.0'
   redstone_web_socket: '>=0.0.1 <0.1.0'
+  cipher: ">=0.7.1 <0.8.0"
