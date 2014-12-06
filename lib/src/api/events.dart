@@ -234,6 +234,19 @@ class EventEndpoint {
     for (var session in globalListeners) {
       sendMessage(session, msg);
     }
+    
+    new Future.delayed(new Duration(milliseconds: 50), () {
+      return webhooks.find();
+    }).then((List<WebHook> hooks) {
+      var group = new FutureGroup();
+      hooks.where((hook) => hook.events.contains(eventName)).forEach((hook) {
+        group.add(http.post(hook.url).then((response) {
+        }).catchError((e) {
+        }));
+      });
+      
+      return group.future;
+    });
   }
 
   @OnClose()
@@ -281,6 +294,51 @@ class EventService {
   }
 }
 
+MongoDbService<WebHook> webhooks = new MongoDbService<WebHook>("webhooks");
+
+@Group("/events/webhooks")
+class EventWebHookService {
+  @Encode()
+  @RequiresToken(permissions: const ["events.webhook.add"])
+  @Route("/add", methods: const [POST])
+  add(@Attr("token") String creatorToken, @Decode() WebHook hook) {
+    hook.creator = creatorToken;
+    
+    return webhooks.insert(hook).then((_) {
+      return {
+        "status": "success",
+        "id": hook.id
+      };
+    });
+  }
+  
+  @Encode()
+  @RequiresToken(permissions: const ["events.webhook.delete"])
+  @Route("/remove")
+  remove(@Decode() RemoveWebHookRequest request) {
+    return webhooks.remove(new SelectorBuilder().id(new ObjectId.fromHexString(request.id))).then((_) {
+      return {
+        "status": "success"
+      };
+    });
+  }
+}
+
 void emit(String event, Map data) {
   eventEndpoint.emit(event, data);
+}
+
+class RemoveWebHookRequest {
+  @Field()
+  String id;
+}
+
+class WebHook {
+  @Id()
+  String id;
+  @Field()
+  String url;
+  @Field()
+  List<String> events;
+  String creator;
 }
