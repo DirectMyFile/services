@@ -221,6 +221,8 @@ class EventEndpoint {
 
     if (!events.containsKey(eventName)) return;
 
+    var id = generateToken(length: 60);
+    
     var msg = {
       "type": "event",
       "event": eventName,
@@ -228,11 +230,15 @@ class EventEndpoint {
     };
 
     for (var session in events[eventName]) {
-      sendMessage(session, msg);
+      sendMessage(session, {
+        "id": id
+      }..addAll(msg));
     }
 
     for (var session in globalListeners) {
-      sendMessage(session, msg);
+      sendMessage(session, {
+        "id": id
+      }..addAll(msg));
     }
     
     new Future.delayed(new Duration(milliseconds: 50), () {
@@ -240,7 +246,10 @@ class EventEndpoint {
     }).then((List<WebHook> hooks) {
       var group = new FutureGroup();
       hooks.where((hook) => hook.events.contains(eventName)).forEach((hook) {
-        group.add(http.post(hook.url).then((response) {
+        group.add(http.post(hook.url, body: msg, headers: {
+          "X-DirectCode-WebHook": hook.id,
+          "X-DirectCode-Event": id
+        }).then((response) {
         }).catchError((e) {
         }));
       });
