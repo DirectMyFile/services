@@ -42,6 +42,7 @@ class TokenService {
     };
   }
   
+  @Encode()
   @RequiresToken(permissions: const ["tokens.revoke"])
   @Route("/revoke")
   revoke(@Decode() RevokeTokenRequest request) {
@@ -56,7 +57,7 @@ class TokenService {
   @RequiresToken(permissions: const ["tokens.list"])
   @Route("/list")
   list() {
-    return manager.allTokens.keys;
+    return manager.allTokens.keys.toList();
   }
 }
 
