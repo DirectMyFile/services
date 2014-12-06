@@ -4,6 +4,7 @@ part of directcode.services.api;
 class TokenService {
   TokenManager manager = new TokenManager()..load();
   
+  @Encode()
   @RequiresToken()
   @Route("/current")
   current(@Attr() String token) {
@@ -13,6 +14,7 @@ class TokenService {
     };
   }
   
+  @Encode()
   @RequiresToken(permissions: const ["tokens.reload"])
   @Route("/reload")
   reload() {
@@ -22,6 +24,7 @@ class TokenService {
     };
   }
   
+  @Encode()
   @RequiresToken(permissions: const ["tokens.create"])
   @Route("/create")
   create(@Attr("token") String creatorToken, @Decode() CreateTokenRequest request) {
@@ -44,8 +47,12 @@ class TokenService {
   revoke(@Decode() RevokeTokenRequest request) {
     manager.removeToken(request.token);
     manager.save();
+    return {
+      "status": "success"
+    };
   }
   
+  @Encode()
   @RequiresToken(permissions: const ["tokens.list"])
   @Route("/list")
   list() {
