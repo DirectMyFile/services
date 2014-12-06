@@ -29,7 +29,7 @@ class TokenService {
   @Route("/create")
   create(@Attr("token") String creatorToken, @Decode() CreateTokenRequest request) {
     var token = generateToken();
-    if (!request.permissions.every((it) => tokens[creatorToken].contains(it))) {
+    if (!hasPermissions(creatorToken, request.permissions)) {
       throw new ErrorResponse(HttpStatus.UNAUTHORIZED, {
         "message": "tried to create a token with more permissions than the creator has"
       });
