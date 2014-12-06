@@ -13,6 +13,7 @@ class RequiresToken {
 void TokenPlugin(Manager manager) {
   manager.addRouteWrapper(RequiresToken, (dynamic metadata, Map<String, String> pathSegments, injector, app.Request request, app.RouteHandler route) {
     var token = app.request.headers['X-DirectCode-Token'];
+    if (token == null) token = app.request.queryParams["token"];
     var info = metadata as RequiresToken;
 
     if (token == null) {
