@@ -246,7 +246,7 @@ class EventEndpoint {
     }).then((List<WebHook> hooks) {
       var group = new FutureGroup();
       hooks.where((hook) => hook.events.contains(eventName)).forEach((hook) {
-        group.add(http.post(hook.url, body: msg, headers: {
+        group.add(http.post(hook.url, body: Convert.JSON.encode(msg), headers: {
           "X-DirectCode-WebHook": hook.id,
           "X-DirectCode-Event": id
         }).then((response) {
@@ -350,4 +350,16 @@ class WebHook {
   @Field()
   List<String> events;
   String creator;
+  
+  Future<bool> ping() {
+    return http.post(url, headers: {
+      "X-DirectCode-WebHook": id
+    }, body: Convert.JSON.encode({
+      "type": "ping"
+    })).then((response) {
+      return response.statusCode == 200;
+    }).catchError((e) {
+      return false;
+    });
+  }
 }
