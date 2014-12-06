@@ -33,6 +33,7 @@ void TokenPlugin(Manager manager) {
       });
 
     } else {
+      request.attributes['token'] = token;
       return route(pathSegments, injector, request);
     }
   }, includeGroups: true);
@@ -61,7 +62,7 @@ void loadTokens() {
   }
 }
 
-bool hasPermissions(String token, List<String> perms) => perms.any((perm) => hasPermission(token, perm));
+bool hasPermissions(String token, List<String> perms) => perms.every((perm) => hasPermission(token, perm));
 
 bool hasPermission(String token, String perm) {
   var allPerms = tokens[token];

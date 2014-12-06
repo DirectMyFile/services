@@ -20,6 +20,7 @@ part "src/api/teamcity.dart";
 part "src/api/zen.dart";
 part "src/api/internal.dart";
 part "src/api/quotes.dart";
+part "src/api/tokens.dart";
 
 SmtpTransport emailTransport;
 
