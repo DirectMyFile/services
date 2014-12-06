@@ -101,7 +101,7 @@ class EventEndpoint {
       return;
     }
 
-    if (!hasPermission(tokened[session], "event.${type}")) {
+    if (!hasPermission(tokened[session], "events.${type}")) {
       sendMessage(session, {
         "type": "error",
         "error": "token.no.permission",
@@ -118,6 +118,15 @@ class EventEndpoint {
           "type": "error",
           "error": "event.missing",
           "message": "event is missing"
+        });
+        return;
+      }
+      
+      if (!hasPermission(tokened[session], "event.register.${event}")) {
+        sendMessage(session, {
+          "type": "error",
+          "error": "token.no.permission",
+          "message": "you do not have permission to register for this event"
         });
         return;
       }
@@ -170,6 +179,15 @@ class EventEndpoint {
       });
     } else if (type == "emit") {
       var event = json['event'];
+      
+      if (!hasPermission(tokened[session], "event.emit.${event}")) {
+        sendMessage(session, {
+          "type": "error",
+          "error": "token.no.permission",
+          "message": "the token you provided does not have permission to emit that event"
+        });
+        return;
+      }
 
       if (event == null) {
         sendMessage(session, {
@@ -250,6 +268,15 @@ class EventService {
     return {
       "listeners": listeners,
       "events": eventz
+    };
+  }
+  
+  @RequiresToken(permissions: const ["events.http.emit"])
+  @Route("/emit", methods: const ["POST"])
+  emitter(@QueryParam() String event, @Body("json") body) {
+    emit(event, body);
+    return {
+      "status": "success"
     };
   }
 }
