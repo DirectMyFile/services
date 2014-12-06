@@ -314,7 +314,7 @@ class EventWebHookService {
   
   @Encode()
   @RequiresToken(permissions: const ["events.webhook.delete"])
-  @Route("/remove")
+  @Route("/remove", methods: const [POST])
   remove(@Decode() RemoveWebHookRequest request) {
     return webhooks.remove(new SelectorBuilder().id(new ObjectId.fromHexString(request.id))).then((_) {
       return {
