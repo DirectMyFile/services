@@ -3,6 +3,7 @@ library directcode.services;
 import "common.dart";
 import "package:redstone/server.dart" as app;
 import 'package:shelf_static/shelf_static.dart';
+import 'package:shelf/shelf.dart' as shelf;
 
 @Install(urlPrefix: "/api")
 import "api.dart";
@@ -29,7 +30,14 @@ void startServices() {
 
 @app.Interceptor(r'/.*')
 allowCORS() {
-  app.chain.next(() => app.response.change(headers: _createCorsHeader()));
+  if (app.request.method == "OPTIONS") {
+    //overwrite the current response and interrupt the chain.
+    app.response = new shelf.Response.ok(null, headers: _createCorsHeader());
+    app.chain.interrupt();
+  } else {
+    //process the chain and wrap the response
+    app.chain.next(() => app.response.change(headers: _createCorsHeader()));
+  }
 }
 
 _createCorsHeader() => {"Access-Control-Allow-Origin": "*"};

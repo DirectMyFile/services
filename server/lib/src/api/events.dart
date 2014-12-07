@@ -291,7 +291,7 @@ class EventService {
   }
   
   @RequiresToken(permissions: const ["events.http.emit"])
-  @Route("/emit", methods: const ["POST"])
+  @Route("/emit", methods: const [POST])
   emitter(@QueryParam() String event, @Body("json") body) {
     emit(event, body);
     return {
