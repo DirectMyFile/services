@@ -5,11 +5,8 @@ EventEndpoint eventEndpoint;
 @WebSocketHandler("/events/ws")
 class EventEndpoint {
   Map<String, List<WebSocketSession>> events = {};
-
   Map<WebSocketSession, String> tokened = {};
-
   Map<String, int> eventCounts = {};
-
   List<WebSocketSession> globalListeners = [];
 
   EventEndpoint() {
