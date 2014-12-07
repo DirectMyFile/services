@@ -1,6 +1,6 @@
 part of directcode.services.api;
 
-MongoDbService<StorageEntry> storageDB = new MongoDbService("storage_entries");
+MongoDbService<StorageEntry> storageDB = new MongoDbService<StorageEntry>("storage_entries");
 
 @Group("/storage")
 class StorageService {
