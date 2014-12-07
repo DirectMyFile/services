@@ -27,10 +27,9 @@ void startServices() {
   app.start(port: port);
 }
 
-@Interceptor(r"/*")
+@app.Interceptor(r'/.*')
 allowCORS() {
-  response = response.change(headers: {
-    "Access-Control-Allow-Origin": "*"
-  });
-  app.chain.next();
+  app.chain.next(() => app.response.change(headers: _createCorsHeader()));
 }
+
+_createCorsHeader() => {"Access-Control-Allow-Origin": "*"};
