@@ -40,4 +40,4 @@ allowCORS() {
   }
 }
 
-_createCorsHeader() => {"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "*"};
+_createCorsHeader() => {"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "Content-Type, X-DirectCode-Token"};
