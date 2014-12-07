@@ -292,7 +292,9 @@ class EventService {
   
   @RequiresToken(permissions: const ["events.http.emit"])
   @Route("/emit", methods: const [POST])
-  emitter(@QueryParam() String event, @Body("json") body) {
+  emitter(@QueryParam() String event) {
+    var body = request.body;
+    if (body is String) body = Convert.JSON.decode(body);
     emit(event, body);
     return {
       "status": "success"
