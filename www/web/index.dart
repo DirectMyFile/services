@@ -1,7 +1,6 @@
 import "dart:html";
 import "package:polymer/polymer.dart";
 import "package:core_elements/core_menu.dart";
-import "package:core_elements/core_item.dart";
 
 void main() {
   initPolymer();
@@ -17,12 +16,16 @@ class DashboardElement extends PolymerElement {
     
     var title = $["page-title"] as SpanElement;
     var url = $["page"] as IFrameElement;
-    CoreMenu menu = $["menu"];
+    var menu = $["menu"] as CoreMenu;
     
     menu.addEventListener("core-select", (e) {
-      print("Menu Selection Changed");
-      title.text = menu.selectedItem.label;
+      menu.items.forEach((item) {
+        item.classes.remove("selected");
+      });
+      
+      title.text = menu.selectedItem.text;
       url.src = menu.selectedItem.getAttribute("data-page");
+      menu.selectedItem.classes.add("selected");
     });
   }
 }
