@@ -2,6 +2,7 @@ library directcode.services;
 
 import "common.dart";
 import "package:redstone/server.dart" as app;
+import 'package:shelf_static/shelf_static.dart';
 
 @Install(urlPrefix: "/api")
 import "api.dart";
@@ -19,6 +20,8 @@ void startServices() {
   app.addPlugin(getWebSocketPlugin());
   app.setupConsoleLog();
 
+  app.setShelfHandler(createStaticHandler("www/build/web/", defaultDocument: "index.html", serveFilesOutsidePath: false));
+  
   var port = config.containsKey("port") ? config['port'] : 8080;
 
   app.start(port: port);
