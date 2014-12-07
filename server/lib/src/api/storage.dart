@@ -69,7 +69,7 @@ class StoragePutRequest {
   @Field()
   String key;
   @Field()
-  dynamic value;
+  String value;
 }
 
 class StorageGetRequest {
