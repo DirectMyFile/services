@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>DirectCode Services</title>
+  <link rel="import" href="packages/core_elements/core_scaffold.html">
+  <link rel="import" href="packages/core_elements/core_menu.html">
+  <link rel="import" href="packages/core_elements/core_item.html">
+  <link rel="import" href="packages/paper_elements/paper_ripple.html">
+</head>
+
+<body unresolved>
+  <polymer-element name="services-dashboard">
+
+    <template>
+      <style>
+        body {
+          font-family: sans-serif;
+        }
+        
+        #navheader {
+          background-color: #56BA89;
+        }
+        
+        #page {
+          width: 100%;
+          height: 100%;
+          border: none;
+        }
+      </style>
+      <core-scaffold>
+
+        <core-header-panel navigation flex>
+          <core-toolbar id="navheader">
+            <span>Menu</span>
+          </core-toolbar>
+          <core-menu id="menu" selected="0">
+            <core-item data-page="/users/register.html" label="User Registration">
+              <paper-ripple></paper-ripple>
+            </core-item>
+          </core-menu>
+        </core-header-panel>
+
+        <span tool id="page-title"></span>
+
+        <iframe height="100%" class="content" id="page"></iframe>
+      </core-scaffold>
+    </template>
+  </polymer-element>
+
+  <services-dashboard></services-dashboard>
+
+  <script type="application/dart" src="index.dart"></script>
+</body>
+
+</html>

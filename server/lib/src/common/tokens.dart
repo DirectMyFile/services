@@ -13,6 +13,7 @@ class RequiresToken {
 void TokenPlugin(Manager manager) {
   manager.addRouteWrapper(RequiresToken, (dynamic metadata, Map<String, String> pathSegments, injector, app.Request request, app.RouteHandler route) {
     var token = app.request.headers['X-DirectCode-Token'];
+    if (token == null) token = app.request.queryParams["token"];
     var info = metadata as RequiresToken;
 
     if (token == null) {
@@ -30,7 +31,9 @@ void TokenPlugin(Manager manager) {
         "error": "token.permission.missing",
         "message": "The token that was provided does not have the required permissions to use this API."
       });
+
     } else {
+      request.attributes['token'] = token;
       return route(pathSegments, injector, request);
     }
   }, includeGroups: true);
@@ -59,7 +62,7 @@ void loadTokens() {
   }
 }
 
-bool hasPermissions(String token, List<String> perms) => perms.any((perm) => hasPermission(token, perm));
+bool hasPermissions(String token, List<String> perms) => perms.every((perm) => hasPermission(token, perm));
 
 bool hasPermission(String token, String perm) {
   var allPerms = tokens[token];
@@ -93,13 +96,15 @@ bool hasPermission(String token, String perm) {
   return false;
 }
 
-String generateToken({int length: 30}) {
+String generateToken({int length: 50}) {
+  Random r = new Random();
   var buffer = new StringBuffer();
   for (int i = 1; i <= length; i++) {
-    if (random.nextBool()) {
-      buffer.write(alphabet[random.nextInt(alphabet.length)]);
+    if (r.nextBool()) {
+      String letter = alphabet[random.nextInt(alphabet.length)];
+      buffer.write(r.nextBool() ? letter.toLowerCase() : letter);
     } else {
-      buffer.write(numbers[random.nextInt(numbers.length)]);
+      buffer.write(numbers[r.nextInt(numbers.length)]);
     }
   }
   return buffer.toString();
@@ -139,4 +144,4 @@ class TokenManager {
 }
 
 const List<String> alphabet = const ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
-const List<String> numbers = const [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+const List<int> numbers = const [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];

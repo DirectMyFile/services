@@ -5,11 +5,8 @@ EventEndpoint eventEndpoint;
 @WebSocketHandler("/events/ws")
 class EventEndpoint {
   Map<String, List<WebSocketSession>> events = {};
-
   Map<WebSocketSession, String> tokened = {};
-
   Map<String, int> eventCounts = {};
-
   List<WebSocketSession> globalListeners = [];
 
   EventEndpoint() {
@@ -101,7 +98,7 @@ class EventEndpoint {
       return;
     }
 
-    if (!hasPermission(tokened[session], "event.${type}")) {
+    if (!hasPermission(tokened[session], "events.${type}")) {
       sendMessage(session, {
         "type": "error",
         "error": "token.no.permission",
@@ -118,6 +115,15 @@ class EventEndpoint {
           "type": "error",
           "error": "event.missing",
           "message": "event is missing"
+        });
+        return;
+      }
+      
+      if (!hasPermission(tokened[session], "event.register.${event}")) {
+        sendMessage(session, {
+          "type": "error",
+          "error": "token.no.permission",
+          "message": "you do not have permission to register for this event"
         });
         return;
       }
@@ -170,6 +176,15 @@ class EventEndpoint {
       });
     } else if (type == "emit") {
       var event = json['event'];
+      
+      if (!hasPermission(tokened[session], "event.emit.${event}")) {
+        sendMessage(session, {
+          "type": "error",
+          "error": "token.no.permission",
+          "message": "the token you provided does not have permission to emit that event"
+        });
+        return;
+      }
 
       if (event == null) {
         sendMessage(session, {
@@ -203,6 +218,8 @@ class EventEndpoint {
 
     if (!events.containsKey(eventName)) return;
 
+    var id = generateToken(length: 60);
+    
     var msg = {
       "type": "event",
       "event": eventName,
@@ -210,12 +227,32 @@ class EventEndpoint {
     };
 
     for (var session in events[eventName]) {
-      sendMessage(session, msg);
+      sendMessage(session, {
+        "id": id
+      }..addAll(msg));
     }
 
     for (var session in globalListeners) {
-      sendMessage(session, msg);
+      sendMessage(session, {
+        "id": id
+      }..addAll(msg));
     }
+    
+    new Future.delayed(new Duration(milliseconds: 50), () {
+      return webhooks.find();
+    }).then((List<WebHook> hooks) {
+      var group = new FutureGroup();
+      hooks.where((hook) => hook.events.contains(eventName)).forEach((hook) {
+        group.add(http.post(hook.url, body: Convert.JSON.encode(msg), headers: {
+          "X-DirectCode-WebHook": hook.id,
+          "X-DirectCode-Event": id
+        }).then((response) {
+        }).catchError((e) {
+        }));
+      });
+      
+      return group.future;
+    });
   }
 
   @OnClose()
@@ -252,8 +289,76 @@ class EventService {
       "events": eventz
     };
   }
+  
+  @RequiresToken(permissions: const ["events.http.emit"])
+  @Route("/emit", methods: const [POST])
+  emitter(@QueryParam() String event) {
+    var body = request.body;
+    if (body is String) body = Convert.JSON.decode(body);
+    emit(event, body);
+    return {
+      "status": "success"
+    };
+  }
+}
+
+MongoDbService<WebHook> webhooks = new MongoDbService<WebHook>("webhooks");
+
+@Group("/events/webhooks")
+class EventWebHookService {
+  @Encode()
+  @RequiresToken(permissions: const ["events.webhook.add"])
+  @Route("/add", methods: const [POST])
+  add(@Attr("token") String creatorToken, @Decode() WebHook hook) {
+    hook.creator = creatorToken;
+    
+    return webhooks.insert(hook).then((_) {
+      return {
+        "status": "success",
+        "id": hook.id
+      };
+    });
+  }
+  
+  @Encode()
+  @RequiresToken(permissions: const ["events.webhook.delete"])
+  @Route("/remove", methods: const [POST])
+  remove(@Decode() RemoveWebHookRequest request) {
+    return webhooks.remove(new SelectorBuilder().id(new ObjectId.fromHexString(request.id))).then((_) {
+      return {
+        "status": "success"
+      };
+    });
+  }
 }
 
 void emit(String event, Map data) {
   eventEndpoint.emit(event, data);
+}
+
+class RemoveWebHookRequest {
+  @Field()
+  String id;
+}
+
+class WebHook {
+  @Id()
+  String id;
+  @Field()
+  String url;
+  @Field()
+  List<String> events;
+  String creator;
+  
+  Future<bool> ping() {
+    return http.post(url, headers: {
+      "X-DirectCode-WebHook": id
+    }, body: Convert.JSON.encode({
+      "type": "ping"
+    })).then((response) {
+      return response.statusCode == 200;
+    }).catchError((e) {
+      return false;
+    });
+  }
 }
