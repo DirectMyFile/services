@@ -6,7 +6,7 @@ MongoDbService<StorageEntry> storageDB = new MongoDbService<StorageEntry>("stora
 class StorageService {
   @Encode()
   @RequiresToken(permissions: const ["storage.put"])
-  @Route("/put", methods: const [POST])
+  @Route("/put", methods: const [POST, PUT])
   put(@Attr() String token, @Decode() StoragePutRequest request) {
     var entry = new StorageEntry();
     entry.key = request.key;
@@ -47,6 +47,32 @@ class StorageService {
   }
   
   @Encode()
+  @RequiresToken(permissions: const ["storage.delete"])
+  @Route("/delete", methods: const [GET, DELETE])
+  delete(@Attr() String token, @Decode() StorageDeleteRequest request) {
+    return storageDB.remove(new SelectorBuilder().eq("ownerToken", token).eq("key", request.key)).then((_) {
+      return {
+        "status": "success"
+      };
+    });
+  }
+  
+  @Encode()
+  @RequiresToken(permissions: const ["storage.update"])
+  @Route("/update", methods: const [POST, PUT])
+  update(@Attr() String token, @Decode() StoragePutRequest request) {
+    var entry = new StorageEntry();
+    entry.key = request.key;
+    entry.value = request.value;
+    entry.ownerToken = token;
+    return storageDB.update(new SelectorBuilder().eq("ownerToken", token).eq("key", request.key), entry).then((_) {
+      return {
+        "status": "success"
+      };
+    });
+  }
+  
+  @Encode()
   @RequiresToken(permissions: const ["storage.list"])
   @Route("/list", methods: const [GET])
   list(@Attr() String token) {
@@ -73,6 +99,11 @@ class StoragePutRequest {
 }
 
 class StorageGetRequest {
+  @Field()
+  String key;
+}
+
+class StorageDeleteRequest {
   @Field()
   String key;
 }
