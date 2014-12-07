@@ -60,7 +60,7 @@ class StorageEntry {
   @Field()
   String key;
   @Field()
-  dynamic value;
+  String value;
   @Field()
   String ownerToken;
 }
