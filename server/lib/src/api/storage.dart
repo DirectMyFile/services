@@ -37,6 +37,13 @@ class StorageService {
   @RequiresToken(permissions: const ["storage.get"])
   @Route("/get", methods: const [GET])
   get(@Attr() String token, @Decode(fromQueryParams: true) StorageGetRequest request) {
+    if (request.key == null) {
+      throw new ErrorResponse(404, {
+        "error": "key.not.specified",
+        "message": "key not specified"
+      });
+    }
+    
     return storageDB.find(new SelectorBuilder().eq("ownerToken", token)).then((entries) {
       return entries.firstWhere((it) => it.key == request.key, orElse: () => null);
     }).then((value) {

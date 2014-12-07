@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>DirectCode Projects</title>
+  <link rel="import" href="packages/core_elements/core_scaffold.html">
+  <link rel="import" href="packages/core_elements/core_menu.html">
+  <link rel="import" href="packages/core_elements/core_item.html">
+  <link rel="import" href="packages/paper_elements/paper_ripple.html">
+  <link rel="import" href="packages/paper_elements/paper_item.html">
+  <link rel="import" href="packages/core_elements/core_icons.html">
+</head>
+
+<body unresolved>
+  <polymer-element name="services-projects">
+
+    <template>
+      <template repeat="{{project in projects}}">
+        <div>{{project.name}}</div>
+      </template>
+    </template>
+  </polymer-element>
+
+  <services-projects></services-projects>
+
+  <script type="application/dart" src="projects.dart"></script>
+</body>
+
+</html>
