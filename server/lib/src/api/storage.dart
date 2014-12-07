@@ -20,6 +20,11 @@ class StorageService {
         });
       } else {
         return storageDB.insert(entry).then((_) {
+          emit("storage.put", {
+            "owner": token,
+            "key": request.key,
+            "value": request.value
+          });
           return {
             "status": "success"
           };
@@ -51,6 +56,10 @@ class StorageService {
   @Route("/delete", methods: const [GET, DELETE])
   delete(@Attr() String token, @Decode() StorageDeleteRequest request) {
     return storageDB.remove(new SelectorBuilder().eq("ownerToken", token).eq("key", request.key)).then((_) {
+      emit("storage.delete", {
+        "owner": token,
+        "key": request.key
+      });
       return {
         "status": "success"
       };
@@ -66,6 +75,11 @@ class StorageService {
     entry.value = request.value;
     entry.ownerToken = token;
     return storageDB.update(new SelectorBuilder().eq("ownerToken", token).eq("key", request.key), entry).then((_) {
+      emit("storage.update", {
+        "owner": token,
+        "key": request.key,
+        "value": request.value
+      });
       return {
         "status": "success"
       };
