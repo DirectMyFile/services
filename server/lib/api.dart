@@ -24,6 +24,7 @@ part "src/api/zen.dart";
 part "src/api/internal.dart";
 part "src/api/quotes.dart";
 part "src/api/tokens.dart";
+part "src/api/storage.dart";
 
 SmtpTransport emailTransport;
 
