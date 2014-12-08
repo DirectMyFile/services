@@ -257,7 +257,7 @@ class EventEndpoint {
     }).then((List<WebHook> hooks) {
       var group = new FutureGroup();
       hooks.where((hook) => hook.events.contains(eventName)).forEach((hook) {
-        group.add(http.post(hook.url, body: Convert.JSON.encode(msg), headers: {
+        group.add(http.post(hook.url, body: Convert.JSON.encode(data), headers: {
           "X-DirectCode-WebHook": hook.id,
           "X-DirectCode-Event": id
         }).then((response) {
