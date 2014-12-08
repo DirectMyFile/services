@@ -4,9 +4,11 @@ EventEndpoint eventEndpoint;
 
 @WebSocketHandler("/events/ws")
 class EventEndpoint {
+  bool _exitHookSetup = false;
   Map<String, List<WebSocketSession>> events = {};
   Map<WebSocketSession, String> tokened = {};
   Map<String, int> eventCounts = {};
+  List<WebSocketSession> activeClients = [];
   List<WebSocketSession> globalListeners = [];
 
   EventEndpoint() {
@@ -15,6 +17,17 @@ class EventEndpoint {
 
   @OnOpen()
   void onOpen(WebSocketSession session) {
+    if (!_exitHookSetup) {
+      ProcessSignal.SIGINT.watch().listen((_) {
+        for (var session in activeClients) {
+          session.connection.close(5000, "stopping");
+        }
+      });
+      _exitHookSetup = true; 
+    }
+    
+    activeClients.add(session);
+    
     sendMessage(session, {
       "type": "connect"
     });
@@ -261,8 +274,8 @@ class EventEndpoint {
       list.remove(session);
     }
 
+    activeClients.remove(session);
     globalListeners.remove(session);
-
     tokened.remove(session);
   }
 }
