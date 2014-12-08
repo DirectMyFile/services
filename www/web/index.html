@@ -28,7 +28,7 @@
           border: none;
         }
         
-        .selected {
+        .core-selected {
           font-weight: bold;
         }
       </style>
@@ -40,7 +40,8 @@
             <span>Menu</span>
           </core-toolbar>
           <core-menu id="menu" selected="0">
-            <paper-item data-page="/users/register.html">User Registration</paper-item>
+            <core-item data-page="/users/register.html">User Registration</core-item>
+            <core-item data-page="/projects/projects.html">Projects</core-item>
           </core-menu>
         </core-header-panel>
 

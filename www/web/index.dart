@@ -1,4 +1,5 @@
 import "dart:html";
+import "dart:async";
 import "package:polymer/polymer.dart";
 import "package:core_elements/core_menu.dart";
 
@@ -19,13 +20,10 @@ class DashboardElement extends PolymerElement {
     var menu = $["menu"] as CoreMenu;
     
     menu.addEventListener("core-select", (e) {
-      menu.items.forEach((item) {
-        item.classes.remove("selected");
-      });
-      
-      title.text = menu.selectedItem.text;
-      url.src = menu.selectedItem.getAttribute("data-page");
-      menu.selectedItem.classes.add("selected");
+      if (!e.detail['isSelected']) return;
+      var item = e.detail['item'];
+      title.text = item.text;
+      url.src = item.dataset['page'];
     });
   }
 }
