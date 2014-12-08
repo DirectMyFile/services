@@ -22,6 +22,7 @@ class EventEndpoint {
         for (var session in activeClients) {
           session.connection.close(5000, "stopping");
         }
+        exit(0);
       });
       _exitHookSetup = true; 
     }
