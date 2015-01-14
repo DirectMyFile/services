@@ -121,7 +121,7 @@ class EventEndpoint {
       return;
     }
 
-    if (type == "register") {
+    if (type == "subscribe") {
       var event = json['event'];
 
       if (event == null) {
@@ -133,11 +133,11 @@ class EventEndpoint {
         return;
       }
       
-      if (!hasPermission(tokened[session], "event.register.${event}")) {
+      if (!hasPermission(tokened[session], "event.subscribe.${event}")) {
         sendMessage(session, {
           "type": "error",
           "error": "token.no.permission",
-          "message": "you do not have permission to register for this event"
+          "message": "you do not have permission to subscribe for this event"
         });
         return;
       }
@@ -147,8 +147,8 @@ class EventEndpoint {
       if (list.contains(session) || globalListeners.contains(session)) {
         sendMessage(session, {
           "type": "error",
-          "error": "event.already.registered",
-          "message": "you have already been registered for this event"
+          "error": "event.already.subscribed",
+          "message": "you are already subscribed to this event"
         });
         return;
       }
@@ -156,10 +156,10 @@ class EventEndpoint {
       list.add(session);
 
       sendMessage(session, {
-        "type": "registered",
+        "type": "subscribed",
         "event": event
       });
-    } else if (type == "unregister") {
+    } else if (type == "unsubscribe") {
       var event = json['event'];
 
       if (event == null) {
@@ -176,8 +176,8 @@ class EventEndpoint {
       if (!list.contains(session)) {
         sendMessage(session, {
           "type": "error",
-          "error": "event.not.registered",
-          "message": "you have not been registered for this event"
+          "error": "event.not.subscribed",
+          "message": "you have not subscribed to this event"
         });
         return;
       }
@@ -185,7 +185,7 @@ class EventEndpoint {
       list.remove(session);
 
       sendMessage(session, {
-        "type": "unregistered",
+        "type": "unsubscribed",
         "event": event
       });
     } else if (type == "emit") {
