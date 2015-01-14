@@ -12,4 +12,8 @@ void loadConfig() {
   var content = file.readAsStringSync();
 
   config = JSON.decode(content);
+  
+  if (Platform.environment.containsKey("C9_PORT")) {
+    config["port"] = int.parse(Platform.environment["C9_PORT"]);
+  }
 }
