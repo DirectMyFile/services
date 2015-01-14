@@ -12,4 +12,5 @@ out/
 tokens.json
 config.json
 google_key.json
+.c9*
 # start.sh
