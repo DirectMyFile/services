@@ -8,6 +8,7 @@ import "package:mustache4dart/mustache4dart.dart";
 
 import "package:redstone/server.dart" as app;
 
+import "package:yaml/yaml.dart" as yaml;
 import "package:http/http.dart" as http;
 
 import "dart:math" show Random;

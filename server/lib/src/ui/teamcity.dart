@@ -1,7 +1,6 @@
 part of directcode.services.ui;
 
-const String teamcityBuildStatusUrl = "http://ci.directcode.org/app/rest/builds/buildType:(id:@)/statusIcon";
-
+final String teamcityBuildStatusUrl = "${config['teamcity_url'}/app/rest/builds/buildType:(id:@)/statusIcon";
 final File teamcityTempFile = new File("${Directory.systemTemp.path}/teamcity-status.png");
 
 @Route("/teamcity/buildStatus/:build.png")
@@ -13,7 +12,7 @@ buildStatusImage(String build) {
   return httpClient.get(url).then((clientResponse) {
 
     if (clientResponse.statusCode != 200) {
-      return new ErrorResponse(404, "Not Found");
+      throw new ErrorResponse(404, "Not Found");
     }
 
     bytes = clientResponse.bodyBytes;
