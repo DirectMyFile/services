@@ -3,26 +3,30 @@
 
 <head>
   <title>Event Statistics</title>
-  <link rel="import" href="packages/core_elements/core_scaffold.html">
-  <link rel="import" href="packages/core_elements/core_menu.html">
-  <link rel="import" href="packages/core_elements/core_item.html">
-  <link rel="import" href="packages/paper_elements/paper_ripple.html">
-  <link rel="import" href="packages/paper_elements/paper_item.html">
-  <link rel="import" href="packages/core_elements/core_icons.html">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.1/css/material.min.css" rel="stylesheet">
+  <script src="../packages/browser/dart.js"></script>
 </head>
 
-<body unresolved>
-  <polymer-element name="services-event-stats">
+<body>
+  <div class="container">
+    <h2>Listeners</h2>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Event</th>
+          <th>Count</th>
+        </tr>
+      </thead>
 
-    <template>
-      <template repeat="{{listener in listeners}}">
-        <div>{{listener.event}}: {{listener.count}}</div>
-      </template>
-    </template>
-  </polymer-element>
+      <tbody id="rows-listeners">
+      </tbody>
+    </table>
+  </div>
 
-  <services-event-stats></services-event-stats>
-
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.1/js/material.min.js"></script>
   <script type="application/dart" src="stats.dart"></script>
 </body>
 
