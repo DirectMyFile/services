@@ -19,6 +19,11 @@ void main() {
       </tr>
       """);
     }
+    
+    var $c = querySelector("#connections");
+    var $u = querySelector("#unique_tokens");
+    $c.appendHtml("Connections: ${json['connections'}");
+    $u.appendHtml("Unique Tokens: ${json['unique_tokens']}");
   });
 }
 
