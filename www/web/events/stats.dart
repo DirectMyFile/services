@@ -22,7 +22,7 @@ void main() {
     
     var $c = querySelector("#connections");
     var $u = querySelector("#unique_tokens");
-    $c.appendHtml("Connections: ${json['connections'}");
+    $c.appendHtml("Connections: ${json['connections']}");
     $u.appendHtml("Unique Tokens: ${json['unique_tokens']}");
   });
 }
