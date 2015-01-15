@@ -40,7 +40,7 @@ void ServicesPlugin(Manager manager) {
     if (value is File) {
       str = value.readAsStringSync();
     } else if (value is String) {
-      return str;
+      str = value;
     } else {
       throw new ArgumentError("Can't create markdown from the route's return type!");
     }
