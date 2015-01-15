@@ -2,7 +2,9 @@ import "dart:html";
 import "dart:convert";
 
 void main() {
+  print("Fetching Event Statistics");
   HttpRequest.getString("/api/events/stats").then((value) {
+    print("Fetched Event Statistics");
     var json = JSON.decode(value);
     var listeners = json["listeners"].keys.map((it) {
       return new Listener()..name = it..count = json["listeners"][it];
