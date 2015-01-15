@@ -297,10 +297,22 @@ class EventService {
     for (var event in endpoint.eventCounts.keys) {
       eventz[event] = endpoint.eventCounts[event];
     }
+    
+    var total = 0;
+    
+    for (var event in endpoint.events.keys) {
+      total += endpoint.events[event].length;
+    }
+    
+    total += endpoint.globalListeners.length;
 
     return {
       "listeners": listeners,
-      "events": eventz
+      "events": eventz,
+      "connections": endpoint.tokened.length,
+      "unique_tokens": endpoint.tokened.values.toSet().length,
+      "global_listeners_count": endpoint.globalListeners.length,
+      "total_listeners_count": total
     };
   }
   
