@@ -1,6 +1,6 @@
 part of directcode.services.ui;
 
-final String teamcityBuildStatusUrl = "${config['teamcity_url'}/app/rest/builds/buildType:(id:@)/statusIcon";
+final String teamcityBuildStatusUrl = "${config['teamcity_url']}/app/rest/builds/buildType:(id:@)/statusIcon";
 final File teamcityTempFile = new File("${Directory.systemTemp.path}/teamcity-status.png");
 
 @Route("/teamcity/buildStatus/:build.png")
