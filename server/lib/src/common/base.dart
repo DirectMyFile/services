@@ -34,39 +34,50 @@ void ServicesPlugin(Manager manager) {
   }
   
   manager.addResponseProcessor(Markdown, (Markdown metadata, handlerName, value, injector) {
-    String str;
-    Map<String, dynamic> data = {};
+    return renderMarkdown(value, true);
+  }, includeGroups: true);
+}
 
-    if (value is File) {
-      str = value.readAsStringSync();
-    } else if (value is String) {
-      str = value;
-    } else {
-      throw new ArgumentError("Can't create markdown from the route's return type!");
-    }
-    
-    var split = new List<String>.from(str.split("\n"));
-    
-    if (hasYamlBlock(split)) {
-      data = extractYamlBlock(split);
-    }
-    
-    String title = data.containsKey("title") ? data["title"] : "No Title";
+String renderMarkdown(value, [bool isRequest = false]) {
+  String str;
+  Map<String, dynamic> data = {};
 
-    var out = markdownToHtml(render(split.join("\n"), {
-      "title": title,
+  if (value is File) {
+    str = value.readAsStringSync();
+  } else if (value is String) {
+    str = value;
+  } else {
+    throw new ArgumentError("Can't create markdown from the route's return type!");
+  }
+    
+  var split = new List<String>.from(str.split("\n"));
+    
+  if (hasYamlBlock(split)) {
+    data = extractYamlBlock(split);
+  }
+    
+  String title = data.containsKey("title") ? data["title"] : "No Title";
+
+  var binding = {
+    "title": title,
+    "data": data
+  };
+  
+  if (isRequest) {
+    binding.addAl({
       "request": app.request,
       "query": app.request.queryParams,
       "session": app.request.session,
-      "headers": app.request.headers,
-      "data": data
-    }));
-    
-    return template("markdown", {
-      "title": title,
-      "content": out
+      "headers": app.request.headers
     });
-  }, includeGroups: true);
+  }
+
+  var out = markdownToHtml(render(split.join("\n"), binding));
+    
+  return template("markdown", {
+    "title": title,
+    "content": out
+  });
 }
 
 final String yamlBlockDelimiter = config.containsKey("yaml_block_delimiter") ? config["yaml_block_delimiter"] : "---";
