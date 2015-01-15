@@ -47,7 +47,7 @@ void ServicesPlugin(Manager manager) {
     
     var split = new List<String>.from(str.split("\n"));
     
-    if (hasYamlBlock(str)) {
+    if (hasYamlBlock(split)) {
       data = extractYamlBlock(split);
     }
     
