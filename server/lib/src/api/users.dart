@@ -91,7 +91,7 @@ class UserService {
 
       email.recipients.add(registerUser.email);
 
-      email.html = template("registration_email", {
+      email.html = renderTemplate("registration_email", {
         "email": registerUser.email,
         "username": registerUser.username
       });

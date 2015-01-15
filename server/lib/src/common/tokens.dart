@@ -9,7 +9,7 @@ class RequiresToken {
   const RequiresToken({this.permissions: const []});
 }
 
-@Plugin
+@plugin
 void TokenPlugin(Manager manager) {
   manager.addRouteWrapper(RequiresToken, (dynamic metadata, Map<String, String> pathSegments, injector, app.Request request, app.RouteHandler route) {
     var token = app.request.headers['X-DirectCode-Token'];
@@ -39,7 +39,7 @@ void TokenPlugin(Manager manager) {
   }, includeGroups: true);
 }
 
-@Setup
+@setup
 void loadTokens() {
   if (useTokenFile) {
     var file = new File("tokens.json");
