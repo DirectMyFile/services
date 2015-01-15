@@ -34,11 +34,11 @@ void ServicesPlugin(Manager manager) {
   }
   
   manager.addResponseProcessor(Markdown, (Markdown metadata, handlerName, value, injector) {
-    return renderMarkdown(value, true);
+    return renderMarkdown(value, isRequest: true);
   }, includeGroups: true);
 }
 
-String renderMarkdown(value, [bool isRequest = false]) {
+String renderMarkdown(value, {bool isRequest: false}) {
   String str;
   Map<String, dynamic> data = {};
 
@@ -60,11 +60,12 @@ String renderMarkdown(value, [bool isRequest = false]) {
 
   var binding = {
     "title": title,
-    "data": data
+    "data": data,
+    "config": config
   };
   
   if (isRequest) {
-    binding.addAl({
+    binding.addAll({
       "request": app.request,
       "query": app.request.queryParams,
       "session": app.request.session,
