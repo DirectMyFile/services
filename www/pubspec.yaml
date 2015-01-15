@@ -1,6 +1,7 @@
 name: services_www
 description: Web Stuff for Services
 dependencies:
+  dart_to_js_script_rewriter: ">=0.0.2 <0.1.0"
   polymer: ">=0.15.2 <0.16.0"
   core_elements: ">=0.6.0 <0.7.0"
   paper_elements: ">=0.6.0 <0.7.0"
@@ -8,3 +9,4 @@ transformers:
 - polymer:
     entry_points:
       - web/index.html
+- dart_to_js_script_rewriter
