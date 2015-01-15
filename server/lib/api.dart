@@ -28,7 +28,7 @@ part "src/api/storage.dart";
 
 SmtpTransport emailTransport;
 
-@Setup
+@setup
 void setupGmail() {
   var options = new GmailSmtpOptions();
 
