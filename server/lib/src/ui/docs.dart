@@ -1,6 +1,7 @@
 part of directcode.services.ui;
 
 @Route("/docs", responseType: "text/html")
+@Markdown()
 docsHome() => docs("home");
 
 @Route("/docs/:page", responseType: "text/html")
