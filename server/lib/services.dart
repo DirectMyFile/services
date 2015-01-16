@@ -12,6 +12,7 @@ import "api.dart";
 import "ui.dart";
 
 void startServices() {
+  hierarchicalLoggingEnabled = true;
   logger.level = Level.INFO;
   logger.info("Loading Configuration");
   loadConfig();
