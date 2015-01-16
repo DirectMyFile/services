@@ -12,6 +12,7 @@ import "api.dart";
 import "ui.dart";
 
 void startServices() {
+  logger.level = Level.INFO;
   logger.info("Loading Configuration");
   loadConfig();
 
