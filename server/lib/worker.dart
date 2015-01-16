@@ -21,7 +21,7 @@ WorkerSocket createWorkerScript(String path) {
   var receiver = new ReceivePort();
   var file = new File(path);
   var uri = new Uri.file(file.path);
-  var pkgRoot = new Directory("../packages");
+  var pkgRoot = new Directory("packages");
   Isolate.spawnUri(uri, [], new Worker(receiver.sendPort), packageRoot: new Uri.file(pkgRoot.path));
   var socket = new WorkerSocket.master(receiver);
   return socket;
