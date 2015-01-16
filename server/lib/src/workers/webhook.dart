@@ -19,7 +19,7 @@ void main(List<String> args, Worker worker) {
         "X-DirectCode-Event": value.eventId
       }).then((response) {
       }).catchError((e) {
-      }));
+      });
     }
   });
   
