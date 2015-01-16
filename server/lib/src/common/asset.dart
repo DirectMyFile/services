@@ -1,5 +1,12 @@
 part of directcode.services.common;
 
+@plugin
+void MarkdownPlugin(Manager manager) {
+  manager.addResponseProcessor(Markdown, (Markdown metadata, handlerName, value, injector) {
+    return renderMarkdown(value, isRequest: true, partial: metadata.partial);
+  }, includeGroups: true);
+}
+
 abstract class DataConsumer {
   void provideData(Map<String, dynamic> data);
 }

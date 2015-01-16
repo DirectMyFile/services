@@ -34,19 +34,15 @@ void ServicesPlugin(Manager manager) {
     var owner = pluginMethod.mirror.owner as LibraryMirror;
     owner.invoke(pluginMethod.mirror.simpleName, [manager]);
   }
-  
-  manager.addResponseProcessor(Markdown, (Markdown metadata, handlerName, value, injector) {
-    return renderMarkdown(value, isRequest: true, partial: metadata.partial);
-  }, includeGroups: true);
 }
 
 String generateBasicId({int length: 30}) {
-  Random r = new Random();
+  var r = new Random(random.nextInt(5000));
   var buffer = new StringBuffer();
   for (int i = 1; i <= length; i++) {
     var n = r.nextInt(50);
     if (n >= 0 && n <= 32) {
-      String letter = alphabet[random.nextInt(alphabet.length)];
+      String letter = alphabet[r.nextInt(alphabet.length)];
       buffer.write(r.nextBool() ? letter.toLowerCase() : letter);
     } else if (n > 32 && n <= 43) {
       buffer.write(numbers[r.nextInt(numbers.length)]);
@@ -57,6 +53,54 @@ String generateBasicId({int length: 30}) {
   return buffer.toString();
 }
 
-const List<String> alphabet = const ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
-const List<int> numbers = const [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-const List<String> specials = const ["@", "=", "_", "+", "-", "!", "."];
+const List<String> alphabet = const [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K",
+  "L",
+  "M",
+  "N",
+  "O",
+  "P",
+  "Q",
+  "R",
+  "S",
+  "T",
+  "U",
+  "V",
+  "W",
+  "X",
+  "Y",
+  "Z"
+];
+
+const List<int> numbers = const [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9
+];
+
+const List<String> specials = const [
+  "@",
+  "=",
+  "_",
+  "+",
+  "-",
+  "!",
+  "."
+];

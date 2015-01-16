@@ -97,11 +97,11 @@ bool hasPermission(String token, String perm) {
 }
 
 String generateToken({int length: 50}) {
-  Random r = new Random();
+  var r = new Random(random.nextInt(5000));
   var buffer = new StringBuffer();
   for (int i = 1; i <= length; i++) {
     if (r.nextBool()) {
-      String letter = alphabet[random.nextInt(alphabet.length)];
+      String letter = alphabet[r.nextInt(alphabet.length)];
       buffer.write(r.nextBool() ? letter.toLowerCase() : letter);
     } else {
       buffer.write(numbers[r.nextInt(numbers.length)]);
