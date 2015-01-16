@@ -4,6 +4,7 @@ import "common.dart";
 import "package:redstone/server.dart" as app;
 import 'package:shelf_static/shelf_static.dart';
 import 'package:shelf/shelf.dart' as shelf;
+import "package:path/path.dart" as Path;
 
 @Install(urlPrefix: "/api")
 import "api.dart";
