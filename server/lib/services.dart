@@ -12,32 +12,34 @@ import "api.dart";
 import "ui.dart";
 
 void startServices() {
+  logger.info("Loading Configuration");
   loadConfig();
-  
+
   var dbManager = new MongoDbManager("mongodb://localhost/services", poolSize: 3);
 
   app.addPlugin(ServicesPlugin);
   app.addPlugin(getMapperPlugin(dbManager));
   app.addPlugin(getWebSocketPlugin());
-  app.setupConsoleLog();
 
   app.setShelfHandler(createStaticHandler("www/build/web/", defaultDocument: "index.html", serveFilesOutsidePath: false));
   
   var port = config.containsKey("port") ? config['port'] : 8080;
 
+  logger.info("Starting");
   app.start(port: port);
 }
 
 @app.Interceptor(r'/.*')
 allowCORS() {
   if (app.request.method == "OPTIONS") {
-    //overwrite the current response and interrupt the chain.
     app.response = new shelf.Response.ok(null, headers: _createCorsHeader());
     app.chain.interrupt();
   } else {
-    //process the chain and wrap the response
     app.chain.next(() => app.response.change(headers: _createCorsHeader()));
   }
 }
 
-_createCorsHeader() => {"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "CONTENT-TYPE, X-DIRECTCODE-TOKEN"};
+_createCorsHeader() => {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "CONTENT-TYPE, X-DIRECTCODE-TOKEN"
+};
