@@ -14,7 +14,7 @@ class EventEndpoint {
 
   EventEndpoint() {
     eventEndpoint = this;
-    webhookWorker = createWorkerScript("server/lib/src/workers/webhook.dart");
+    webhookWorker = createWorkerScript("../lib/src/workers/webhook.dart");
   }
 
   @OnOpen()
