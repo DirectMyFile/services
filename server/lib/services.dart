@@ -14,6 +14,13 @@ import "ui.dart";
 void startServices() {
   hierarchicalLoggingEnabled = true;
   logger.level = Level.INFO;
+  logger.onRecord.listen((r) {
+    print("[${r.loggerName}] ${r.message}");
+    if (r.error != null) {
+      print(r.error);
+      print(r.stackTrace);
+    }
+  });
   logger.info("Loading Configuration");
   loadConfig();
 
