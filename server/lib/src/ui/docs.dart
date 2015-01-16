@@ -9,5 +9,5 @@ docs(String page) {
     throw new ErrorResponse(404, "Page Not Found");
   }
   
-  return file.readAsString();
+  return file;
 }
