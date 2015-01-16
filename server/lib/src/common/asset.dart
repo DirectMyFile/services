@@ -46,6 +46,16 @@ Map<String, dynamic> extractYamlBlock(List<String> split) {
 typedef dynamic PartialProvider(String name);
 
 String renderTemplate(String templateName, binding, {PartialProvider partial}) {
+  if (partial == null) {
+    partial = (name) {
+      var f = new File("templates/${name}.mustache");
+      if (!f.existsSync()) {
+        throw new Exception("Template does not exist.");
+      }
+      return f.readAsStringSync();
+    };
+  }
+  
   var file = new File("templates/${templateName}.mustache");
   
   if (!file.existsSync()) {
