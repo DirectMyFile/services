@@ -1,6 +1,9 @@
 part of directcode.services.ui;
 
-@Route("/docs/:page.md")
+@Route("/docs", responseType: "text/html")
+docsHome() => docs("home");
+
+@Route("/docs/:page", responseType: "text/html")
 @Markdown()
 docs(String page) {
   var file = new File("docs/${page}.md");
