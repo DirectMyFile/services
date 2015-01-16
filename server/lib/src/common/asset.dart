@@ -1,5 +1,13 @@
 part of directcode.services.common;
 
+class Markdown {
+  final PartialProvider partial;
+  
+  const Markdown({this.partial: null});
+}
+
+const Markdown markdown = const Markdown();
+
 @plugin
 void MarkdownPlugin(Manager manager) {
   manager.addResponseProcessor(Markdown, (Markdown metadata, handlerName, value, injector) {

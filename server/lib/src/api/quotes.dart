@@ -1,13 +1,11 @@
 part of directcode.services.api;
 
-const List<String> _QUOTES = const [
-  "I'm going to fstab this fstab. -Logan",
-  "if (username == \"samrg472\" && password == \"12345\") // Such secure authentication -samrg472"
-];
+List<String> getQuotes() => fromDataFile("quotes.yaml");
 
 @Route("/quote")
 quote() {
+  var q  = getQuotes();
   return {
-    "quote": _QUOTES[random.nextInt(_QUOTES.length)]
+    "quote": q[random.nextInt(q.length)]
   };
 }

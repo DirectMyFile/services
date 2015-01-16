@@ -4,12 +4,6 @@ final Random random = new Random();
 final http.Client httpClient = new http.Client();
 final Logger logger = new Logger("Services");
 
-class Markdown {
-  final PartialProvider partial;
-  
-  const Markdown({this.partial: null});
-}
-
 class SetupMethod {
   const SetupMethod();
 }
@@ -51,6 +45,36 @@ String generateBasicId({int length: 30}) {
     }
   }
   return buffer.toString();
+}
+
+Map<String, dynamic> _datas = {};
+
+dynamic fromDataFile(String name) {
+  if (!_datas.containsKey(name)) {
+    var file = new File("data/${name}");
+    if (!file.existsSync()) {
+      throw new Exception("Unable to find data file: ${name}");
+    }
+    file.watch().listen((event) {
+      if (event == FileSystemEvent.MODIFY) {
+        _datas[name] = _loadDataFile(file, name);
+      }
+    });
+    _datas[name] = _loadDataFile(file, name);
+  }
+  return _datas[name];
+}
+
+dynamic _loadDataFile(File file, String name) {
+  
+  var content = file.readAsStringSync();
+  if (name.endsWith(".json")) {
+    return JSON.decode(content);
+  } else if (name.endsWith(".yaml") || name.endsWith(".yml")) {
+    return yaml.loadYaml(content);
+  } else {
+    throw new Exception("Unsupported File Type: ${name}");
+  }
 }
 
 const List<String> alphabet = const [

@@ -13,6 +13,8 @@ import "common.dart";
 
 import "package:http/http.dart" as http;
 
+import "package:services/src/workers/webhook.dart" show WebHookExecution;
+
 import "package:mongo_dart/mongo_dart.dart";
 
 part "src/api/members.dart";

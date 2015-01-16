@@ -4,6 +4,7 @@ EventEndpoint eventEndpoint;
 
 @WebSocketHandler("/events/ws")
 class EventEndpoint {
+  WorkerSocket webhookWorker;
   bool _exitHookSetup = false;
   Map<String, List<WebSocketSession>> events = {};
   Map<WebSocketSession, String> tokened = {};
@@ -13,6 +14,7 @@ class EventEndpoint {
 
   EventEndpoint() {
     eventEndpoint = this;
+    webhookWorker = createWorker("server/lib/src/workers/webhook.dart");
   }
 
   @OnOpen()
@@ -22,7 +24,11 @@ class EventEndpoint {
         for (var session in activeClients) {
           session.connection.close(5000, "stopping");
         }
-        exit(0);
+        
+        webhookWorker.close();
+        webhookWorker.done.then((_) {
+          exit(0);
+        });
       });
       _exitHookSetup = true; 
     }
@@ -255,17 +261,15 @@ class EventEndpoint {
     new Future.delayed(new Duration(milliseconds: 50), () {
       return webhooks.find();
     }).then((List<WebHook> hooks) {
-      var group = new FutureGroup();
       hooks.where((hook) => hook.events.contains(eventName)).forEach((hook) {
-        group.add(http.post(hook.url, body: Convert.JSON.encode(data), headers: {
-          "X-DirectCode-WebHook": hook.id,
-          "X-DirectCode-Event": id
-        }).then((response) {
-        }).catchError((e) {
-        }));
+        var e = new WebHookExecution();
+        e.url = hook.url;
+        e.hookId = hook.id;
+        e.eventId = id;
+        e.event = eventName;
+        e.data = data;
+        webhookWorker.add(e);
       });
-      
-      return group.future;
     });
   }
 
