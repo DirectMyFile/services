@@ -69,6 +69,11 @@ String renderTemplate(String templateName, binding, {PartialProvider partial}) {
     
     if (binding is Map) {
       binding["data"] = data;
+      if (data.containsKey("defaults")) {
+        var b = new Map.from(data["defaults"]);
+        b.addAll(binding);
+        binding = b;
+      }
     } else if (binding is DataConsumer) {
       binding.provideData(data);
     } else {
