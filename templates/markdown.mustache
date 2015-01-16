@@ -1,10 +1,27 @@
+---
+defaults:
+  pretty_code: true
+---
 <!DOCTYPE html>
 <html>
   <head>
     <title>{{title}}</title>
+    {{#stylesheets}}
+    <link href="{{url}}" rel="stylesheet">
+    {{/stylesheets}}
+    <link href="http://directmyfile.github.io/github.dart/github-markdown.css" rel="stylesheet">
   </head>
   
   <body>
     {{{content}}}
+    
+    {{#scripts}}
+    <script src="{{url}}"></script>
+    {{/scripts}}
+    
+    {{#pretty_code}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/lang-dart.js"></script>
+    {{/pretty_code}}
   </body>
 </html>
