@@ -10,6 +10,7 @@ fi
 set +e
 dart server/bin/start.dart
 exit=${?}
+
 if [ ${exit} == 5 ]
 then
   ./start.sh
