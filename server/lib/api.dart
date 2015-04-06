@@ -3,6 +3,7 @@ library directcode.services.api;
 import "package:mailer/mailer.dart";
 
 import "package:password_hasher/password_hasher.dart";
+import "package:crypto/crypto.dart" as Crypto;
 
 import "dart:convert" as Convert;
 

@@ -2,29 +2,29 @@ part of directcode.services.api;
 
 @Group("/teamcity")
 class TeamCityService {
-
-  HttpClient client = new HttpClient()
-    ..addCredentials(Uri.parse(url), "TeamCity", new HttpClientBasicCredentials(username, password));
+  http.Client client = new http.Client();
 
   static String get url => config['teamcity_url'] + "/httpAuth/app/rest/latest";
-
   static String get username => config['teamcity_username'];
-
   static String get password => config['teamcity_password'];
 
   Future getJSON(String path) {
-    var uri = Uri.parse(url + path);
-    return client.getUrl(uri).then((request) {
-      request.headers.add("Accept", "application/json");
-      return request.close();
+    var u = url + path;
+    var auth = Crypto.CryptoUtils.bytesToBase64(Convert.UTF8.encode("$username:$password"));
+    return http.get(u, headers: {
+      "Authorization": "Basic ${auth}",
+      "Accept": "application/json"
     }).then((response) {
-      return response.transform(Convert.UTF8.decoder).join();
-    }).then((value) {
-      return Convert.JSON.decode(value);
+      if (response.statusCode != 200) {
+        throw new ErrorResponse(response.statusCode, response.body);
+      }
+
+      return Convert.JSON.decode(response.body);
     });
   }
 
   @Route("/version")
+  @Encode()
   version() {
     return getJSON("/server").then((response) {
       return {
@@ -38,6 +38,7 @@ class TeamCityService {
   }
 
   @Route("/projects")
+  @Encode()
   projects() {
     return getJSON("/projects").then((response) {
       var projects = response['project'];

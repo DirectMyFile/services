@@ -4,17 +4,29 @@ MongoDbService<Project> projects = new MongoDbService<Project>("projects");
 
 class ProjectDescriptor extends Model {
   @Field()
-  @NotEmpty()
   String name;
 
-  toSelector() => {
-    "name": name
-  };
+  @Field()
+  String url;
+
+  toSelector() {
+    var map = {};
+
+    if (name != null) {
+      map["name"] = name;
+    }
+
+    if (url != null) {
+      map["url"] = url;
+    }
+
+    return map;
+  }
 }
 
 class Project extends Model {
   @Id()
-  String _id;
+  String id;
 
   @Field()
   @NotEmpty()
@@ -43,15 +55,15 @@ class ProjectService {
 
   @RequiresToken(permissions: const ["projects.add"])
   @Route("/add", methods: const [POST])
-  addProject(@Decode() Project project) {
+  addProject(@Decode() Project project) async {
     emit("projects.added", encode(project));
-    projects.insert(project);
+    return projects.insert(project);
   }
 
   @RequiresToken(permissions: const ["project.remove"])
   @Route("/remove", methods: const [POST])
   removeProject(@Decode() ProjectDescriptor project) {
     emit("projects.removed", encode(project));
-    projects.remove(project.toSelector());
+    return projects.remove(project.toSelector());
   }
 }
