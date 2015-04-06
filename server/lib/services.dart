@@ -1,10 +1,9 @@
 library directcode.services;
 
 import "common.dart";
-import "package:redstone/server.dart" as app;
+import "package:redstone/redstone.dart" as app;
 import 'package:shelf_static/shelf_static.dart';
 import 'package:shelf/shelf.dart' as shelf;
-import "package:path/path.dart" as Path;
 
 @Install(urlPrefix: "/api")
 import "api.dart";
@@ -32,7 +31,7 @@ void startServices() {
   app.addPlugin(getWebSocketPlugin());
 
   app.setShelfHandler(createStaticHandler("www/build/web/", defaultDocument: "index.html", serveFilesOutsidePath: false));
-  
+
   var port = config.containsKey("port") ? config['port'] : 8080;
 
   logger.info("Starting");
@@ -40,12 +39,12 @@ void startServices() {
 }
 
 @app.Interceptor(r'/.*')
-allowCORS() {
+allowCORS() async {
   if (app.request.method == "OPTIONS") {
-    app.response = new shelf.Response.ok(null, headers: _createCorsHeader());
-    app.chain.interrupt();
+    await chain.next();
+    return new shelf.Response.ok(null, headers: _createCorsHeader());
   } else {
-    app.chain.next(() => app.response.change(headers: _createCorsHeader()));
+    return await app.chain.next();
   }
 }
 
