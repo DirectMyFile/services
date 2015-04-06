@@ -31,18 +31,19 @@ import "package:redstone/redstone.dart" show
 import "package:logging/logging.dart";
 import "package:markd/markdown.dart";
 import "package:googleapis/drive/v2.dart" as drive;
-import 'package:googleapis_auth/auth_io.dart';
-import 'package:googleapis_auth/auth.dart';
+import "package:googleapis_auth/auth_io.dart";
+import "package:googleapis_auth/auth.dart";
 import "package:quiver/collection.dart";
 import "package:services/worker.dart";
+import "package:di/di.dart";
 
-export 'package:redstone_mapper/mapper.dart';
-export 'package:redstone_mapper/plugin.dart';
-export 'package:redstone_mapper_mongo/service.dart';
-export 'package:redstone_mapper_mongo/manager.dart';
-export 'package:redstone_mapper_mongo/metadata.dart';
+export "package:redstone_mapper/mapper.dart";
+export "package:redstone_mapper/plugin.dart";
+export "package:redstone_mapper_mongo/service.dart";
+export "package:redstone_mapper_mongo/manager.dart";
+export "package:redstone_mapper_mongo/metadata.dart";
 export "package:logging/logging.dart";
-export 'package:redstone_web_socket/redstone_web_socket.dart';
+export "package:redstone_web_socket/redstone_web_socket.dart";
 export "package:services/worker.dart";
 
 export "package:redstone/redstone.dart" show

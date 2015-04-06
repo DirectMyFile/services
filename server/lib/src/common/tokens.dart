@@ -11,30 +11,29 @@ class RequiresToken {
 
 @plugin
 void TokenPlugin(Manager manager) {
-  manager.addRouteWrapper(RequiresToken, (dynamic metadata, Map<String, String> pathSegments, injector, app.Request request, app.RouteHandler route) {
+  manager.addRouteWrapper(RequiresToken, (dynamic metadata, Injector injector, app.Request request, app.DynamicRoute route) {
     var token = app.request.headers['X-DirectCode-Token'];
-    if (token == null) token = app.request.queryParams["token"];
+    if (token == null) token = app.request.queryParameters["token"];
     var info = metadata as RequiresToken;
 
     if (token == null) {
-      app.chain.interrupt(statusCode: HttpStatus.UNAUTHORIZED, responseValue: {
+      return app.chain.createResponse(HttpStatus.UNAUTHORIZED, responseValue: {
         "error": "token.required",
         "message": "A token is required to use this API."
       });
     } else if (!tokens.containsKey(token)) {
-      app.chain.interrupt(statusCode: HttpStatus.UNAUTHORIZED, responseValue: {
+      return app.chain.createResponse(HttpStatus.UNAUTHORIZED, responseValue: {
         "error": "token.invalid",
         "message": "The token that was provided is invalid."
       });
     } else if (!hasPermissions(token, info.permissions)) {
-      app.chain.interrupt(statusCode: HttpStatus.UNAUTHORIZED, responseValue: {
+      return app.chain.createResponse(HttpStatus.UNAUTHORIZED, responseValue: {
         "error": "token.permission.missing",
         "message": "The token that was provided does not have the required permissions to use this API."
       });
-
     } else {
       request.attributes['token'] = token;
-      return route(pathSegments, injector, request);
+      return route(injector, request);
     }
   }, includeGroups: true);
 }

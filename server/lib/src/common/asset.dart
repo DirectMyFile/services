@@ -2,7 +2,7 @@ part of directcode.services.common;
 
 class Markdown {
   final PartialProvider partial;
-  
+
   const Markdown({this.partial: null});
 }
 
@@ -28,17 +28,17 @@ bool hasYamlBlock(List<String> split) {
 Map<String, dynamic> extractYamlBlock(List<String> split) {
   var begin = 0;
   var end = split.indexOf(yamlBlockDelimiter, begin + 1);
-    
+
   if (begin <= -1 || end <= -1 || (end - begin) <= 1) {
     return {};
   } else {
     var lines = split.getRange(begin, end);
     var c = lines.join("\n");
-      
+
     for (var i = begin; i <= end; i++) {
       split.removeAt(0);
     }
-    
+
     return yaml.loadYaml(c);
   }
 }
@@ -55,18 +55,18 @@ String renderTemplate(String templateName, binding, {PartialProvider partial}) {
       return f.readAsStringSync();
     };
   }
-  
+
   var file = new File("templates/${templateName}.mustache");
-  
+
   if (!file.existsSync()) {
     throw new ArgumentError("Template does not exist.");
   }
-  
+
   var lines = file.readAsLinesSync();
-  
+
   if (hasYamlBlock(lines)) {
     var data = extractYamlBlock(lines);
-    
+
     if (binding is Map) {
       binding["data"] = data;
       if (data.containsKey("defaults")) {
@@ -95,13 +95,13 @@ String renderMarkdown(value, {bool isRequest: false, PartialProvider partial}) {
   } else {
     throw new ArgumentError("Can't create markdown from the route's return type!");
   }
-    
+
   var split = new List<String>.from(str.split("\n"));
-    
+
   if (hasYamlBlock(split)) {
     data = extractYamlBlock(split);
   }
-    
+
   String title = data.containsKey("title") ? data["title"] : "No Title";
 
   var binding = {
@@ -109,11 +109,11 @@ String renderMarkdown(value, {bool isRequest: false, PartialProvider partial}) {
     "data": data,
     "config": config
   };
-  
+
   if (isRequest) {
     binding.addAll({
       "request": app.request,
-      "query": app.request.queryParams,
+      "query": app.request.queryParameters,
       "session": app.request.session,
       "headers": app.request.headers
     });
@@ -124,11 +124,11 @@ String renderMarkdown(value, {bool isRequest: false, PartialProvider partial}) {
     "title": title,
     "content": out
   };
-  
+
   if (data.containsKey("template_binding")) {
     b.addAll(data["template_binding"]);
   }
-  
+
   return renderTemplate(data.containsKey("html_template") ? data["html_template"] : "markdown", b, partial: partial);
 }
 
