@@ -18,12 +18,12 @@ const PluginMethod plugin = const PluginMethod();
 void ServicesPlugin(Manager manager) {
   var setupMethods = manager.findFunctions(SetupMethod);
   var pluginMethods = manager.findFunctions(PluginMethod);
-  
+
   for (var setupMethod in setupMethods) {
     var owner = setupMethod.mirror.owner as LibraryMirror;
     owner.invoke(setupMethod.mirror.simpleName, []);
   }
-  
+
   for (var pluginMethod in pluginMethods) {
     var owner = pluginMethod.mirror.owner as LibraryMirror;
     owner.invoke(pluginMethod.mirror.simpleName, [manager]);
@@ -66,7 +66,7 @@ dynamic fromDataFile(String name) {
 }
 
 dynamic _loadDataFile(File file, String name) {
-  
+
   var content = file.readAsStringSync();
   if (name.endsWith(".json")) {
     return JSON.decode(content);

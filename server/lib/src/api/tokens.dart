@@ -3,7 +3,7 @@ part of directcode.services.api;
 @Group("/tokens")
 class TokenService {
   TokenManager manager = new TokenManager()..load();
-  
+
   @Encode()
   @RequiresToken()
   @Route("/current")
@@ -13,7 +13,7 @@ class TokenService {
       "permissions": manager.allTokens[token]
     };
   }
-  
+
   @Encode()
   @RequiresToken(permissions: const ["tokens.reload"])
   @Route("/reload")
@@ -23,7 +23,7 @@ class TokenService {
       "status": "success"
     };
   }
-  
+
   @Encode()
   @RequiresToken(permissions: const ["tokens.create"])
   @Route("/create")
@@ -41,7 +41,7 @@ class TokenService {
       "permissions": request.permissions
     };
   }
-  
+
   @Encode()
   @RequiresToken(permissions: const ["tokens.revoke"])
   @Route("/revoke")
@@ -52,7 +52,7 @@ class TokenService {
       "status": "success"
     };
   }
-  
+
   @Encode()
   @RequiresToken(permissions: const ["tokens.list"])
   @Route("/list")
@@ -61,12 +61,12 @@ class TokenService {
   }
 }
 
-class CreateTokenRequest {
+class CreateTokenRequest extends Model {
   @Field()
   List<String> permissions = [];
 }
 
-class RevokeTokenRequest {
+class RevokeTokenRequest extends Model {
   @Field()
   String token;
 }

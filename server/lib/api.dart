@@ -8,12 +8,9 @@ import "dart:convert" as Convert;
 
 import "dart:async";
 import "dart:io";
-import "package:quiver/async.dart";
 import "common.dart";
 
 import "package:http/http.dart" as http;
-
-import "package:services/src/workers/webhook.dart" show WebHookExecution;
 
 import "package:mongo_dart/mongo_dart.dart";
 

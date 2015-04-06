@@ -4,9 +4,9 @@ PasswordHasher hasher = new PasswordHasher();
 
 MongoDbService<User> users = new MongoDbService<User>("users");
 
-var userValidator = new Validator(User, true);
+Validator userValidator = new Validator(User, true);
 
-class User {
+class User extends Model {
   @Id()
   String _id;
 
@@ -25,7 +25,7 @@ class User {
   bool checkPassword(String password) => hasher.checkPassword(passwordHash, password);
 }
 
-class RegisterUser {
+class RegisterUser extends Model {
   @Field()
   String username;
 
@@ -36,7 +36,7 @@ class RegisterUser {
   String password;
 }
 
-class CheckUser {
+class CheckUser extends Model {
   @Field()
   String username;
 
@@ -44,7 +44,7 @@ class CheckUser {
   String password;
 }
 
-class UserCheckSuccess {
+class UserCheckSuccess extends Model {
   UserCheckSuccess(this.email);
 
   @Field()
@@ -54,7 +54,7 @@ class UserCheckSuccess {
   String email;
 }
 
-class UserRegistered {
+class UserRegistered extends Model {
   @Field()
   bool registered = true;
 }

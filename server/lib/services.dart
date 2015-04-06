@@ -38,14 +38,12 @@ void startServices() {
   app.start(port: port);
 }
 
-@app.Interceptor(r'/.*')
-allowCORS() async {
-  if (app.request.method == "OPTIONS") {
+@Interceptor(r"/.*")
+handleCORS() async {
+  if (request.method != "OPTIONS") {
     await chain.next();
-    return new shelf.Response.ok(null, headers: _createCorsHeader());
-  } else {
-    return await app.chain.next();
   }
+  return response.change(headers: _createCorsHeader());
 }
 
 _createCorsHeader() => {

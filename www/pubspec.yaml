@@ -9,4 +9,5 @@ transformers:
 - polymer:
     entry_points:
       - web/index.html
+      - web/projects/projects.html
 - dart_to_js_script_rewriter

@@ -43,7 +43,7 @@ class StorageService {
         "message": "key not specified"
       });
     }
-    
+
     return storageDB.find(new SelectorBuilder().eq("ownerToken", token)).then((entries) {
       return entries.firstWhere((it) => it.key == request.key, orElse: () => null);
     }).then((value) {
@@ -57,7 +57,7 @@ class StorageService {
       }
     });
   }
-  
+
   @Encode()
   @RequiresToken(permissions: const ["storage.delete"])
   @Route("/delete", methods: const [GET, DELETE])
@@ -72,7 +72,7 @@ class StorageService {
       };
     });
   }
-  
+
   @Encode()
   @RequiresToken(permissions: const ["storage.update"])
   @Route("/update", methods: const [POST, PUT])
@@ -92,7 +92,7 @@ class StorageService {
       };
     });
   }
-  
+
   @Encode()
   @RequiresToken(permissions: const ["storage.list"])
   @Route("/list", methods: const [GET])
@@ -101,7 +101,7 @@ class StorageService {
   }
 }
 
-class StorageEntry {
+class StorageEntry extends Model {
   @Id()
   String id;
   @Field()
@@ -112,19 +112,19 @@ class StorageEntry {
   String ownerToken;
 }
 
-class StoragePutRequest {
+class StoragePutRequest extends Model {
   @Field()
   String key;
   @Field()
   String value;
 }
 
-class StorageGetRequest {
+class StorageGetRequest extends Model {
   @Field()
   String key;
 }
 
-class StorageDeleteRequest {
+class StorageDeleteRequest extends Model {
   @Field()
   String key;
 }

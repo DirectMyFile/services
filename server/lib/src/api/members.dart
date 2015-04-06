@@ -2,7 +2,7 @@ part of directcode.services.api;
 
 MongoDbService<Member> members = new MongoDbService<Member>("members");
 
-class Member {
+class Member extends Model {
   @Id()
   String _id;
 

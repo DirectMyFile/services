@@ -36,6 +36,7 @@ import "package:googleapis_auth/auth.dart";
 import "package:quiver/collection.dart";
 import "package:services/worker.dart";
 import "package:di/di.dart";
+import "package:redstone_mapper/mapper.dart";
 
 export "package:redstone_mapper/mapper.dart";
 export "package:redstone_mapper/plugin.dart";
@@ -76,3 +77,7 @@ part "src/common/asset.dart";
 part "src/common/base.dart";
 part "src/common/config.dart";
 part "src/common/google.dart";
+
+abstract class Model {
+  Map toJson() => encode(this);
+}

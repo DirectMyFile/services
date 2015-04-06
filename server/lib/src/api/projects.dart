@@ -2,7 +2,7 @@ part of directcode.services.api;
 
 MongoDbService<Project> projects = new MongoDbService<Project>("projects");
 
-class ProjectDescriptor {
+class ProjectDescriptor extends Model {
   @Field()
   @NotEmpty()
   String name;
@@ -12,7 +12,7 @@ class ProjectDescriptor {
   };
 }
 
-class Project {
+class Project extends Model {
   @Id()
   String _id;
 
@@ -27,12 +27,15 @@ class Project {
   @NotEmpty()
   @Field()
   String url;
+
+  @override
+  String toString() => encodeJson(this);
 }
 
 @Group("/projects")
 class ProjectService {
-  @Encode()
   @Route("/list")
+  @Encode()
   listProjects() => projects.find();
 
   @RequiresToken(permissions: const ["projects.add"])
