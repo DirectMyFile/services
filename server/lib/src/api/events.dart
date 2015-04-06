@@ -19,15 +19,13 @@ class WebHookWorker {
 
     socket = worker.createSocket();
 
-    socket.listen((value) {
-      if (value is WebHookExecution) {
-        client.post(value.url, body: Convert.JSON.encode(value.data), headers: {
-          "X-DirectCode-WebHook": value.hookId,
-          "X-DirectCode-Event": value.eventId
-        }).then((response) {
-        }).catchError((e) {
-        });
-      }
+    socket.addMethod("execute", (WebHookExecution hook) {
+      client.post(hook.url, body: Convert.JSON.encode(hook.data), headers: {
+        "X-DirectCode-WebHook": hook.hookId,
+        "X-DirectCode-Event": hook.eventId
+      }).then((response) {
+      }).catchError((e) {
+      });
     });
 
     await socket.done;
@@ -301,7 +299,7 @@ class EventEndpoint {
         e.eventId = id;
         e.event = eventName;
         e.data = data;
-        webhookWorker.add(e);
+        webhookWorker.callMethod("execute", e);
       });
     });
   }

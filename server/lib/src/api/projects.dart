@@ -28,6 +28,9 @@ class Project extends Model {
   @Field()
   String url;
 
+  @Field()
+  String github;
+
   @override
   String toString() => encodeJson(this);
 }
