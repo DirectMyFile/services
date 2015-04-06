@@ -3,7 +3,8 @@ part of directcode.services.api;
 @Group("/teamcity")
 class TeamCityService {
 
-  HttpClient client = new HttpClient()..addCredentials(Uri.parse(url), "TeamCity", new HttpClientBasicCredentials(username, password));
+  HttpClient client = new HttpClient()
+    ..addCredentials(Uri.parse(url), "TeamCity", new HttpClientBasicCredentials(username, password));
 
   static String get url => config['teamcity_url'] + "/httpAuth/app/rest/latest";
 

@@ -2,6 +2,39 @@ part of directcode.services.api;
 
 EventEndpoint eventEndpoint;
 
+class WebHookExecution {
+  String event;
+  Map data;
+  String hookId;
+  String eventId;
+  String url;
+}
+
+class WebHookWorker {
+  static WorkerSocket socket;
+  static http.Client client = new http.Client();
+
+  static start(Worker worker) async {
+    print("[WebHook Worker] Started");
+
+    socket = worker.createSocket();
+
+    socket.listen((value) {
+      if (value is WebHookExecution) {
+        client.post(value.url, body: Convert.JSON.encode(value.data), headers: {
+          "X-DirectCode-WebHook": value.hookId,
+          "X-DirectCode-Event": value.eventId
+        }).then((response) {
+        }).catchError((e) {
+        });
+      }
+    });
+
+    await socket.done;
+    print("[WebHook Worker] Stopped");
+  }
+}
+
 @WebSocketHandler("/events/ws")
 class EventEndpoint {
   WorkerSocket webhookWorker;
@@ -14,7 +47,7 @@ class EventEndpoint {
 
   EventEndpoint() {
     eventEndpoint = this;
-    webhookWorker = createWorkerScript("../lib/src/workers/webhook.dart");
+    webhookWorker = createWorker(WebHookWorker.start);
   }
 
   @OnOpen()
@@ -24,17 +57,17 @@ class EventEndpoint {
         for (var session in activeClients) {
           session.connection.close(5000, "stopping");
         }
-        
+
         webhookWorker.close();
         webhookWorker.done.then((_) {
           exit(0);
         });
       });
-      _exitHookSetup = true; 
+      _exitHookSetup = true;
     }
-    
+
     activeClients.add(session);
-    
+
     sendMessage(session, {
       "type": "connect"
     });
@@ -138,7 +171,7 @@ class EventEndpoint {
         });
         return;
       }
-      
+
       if (!hasPermission(tokened[session], "event.subscribe.${event}")) {
         sendMessage(session, {
           "type": "error",
@@ -196,7 +229,7 @@ class EventEndpoint {
       });
     } else if (type == "emit") {
       var event = json['event'];
-      
+
       if (!hasPermission(tokened[session], "event.emit.${event}")) {
         sendMessage(session, {
           "type": "error",
@@ -239,7 +272,7 @@ class EventEndpoint {
     if (!events.containsKey(eventName)) return;
 
     var id = generateToken(length: 60);
-    
+
     var msg = {
       "type": "event",
       "event": eventName,
@@ -257,7 +290,7 @@ class EventEndpoint {
         "id": id
       }..addAll(msg));
     }
-    
+
     new Future.delayed(new Duration(milliseconds: 50), () {
       return webhooks.find();
     }).then((List<WebHook> hooks) {
@@ -301,13 +334,13 @@ class EventService {
     for (var event in endpoint.eventCounts.keys) {
       eventz[event] = endpoint.eventCounts[event];
     }
-    
+
     var total = 0;
-    
+
     for (var event in endpoint.events.keys) {
       total += endpoint.events[event].length;
     }
-    
+
     total += endpoint.globalListeners.length;
 
     return {
@@ -319,7 +352,7 @@ class EventService {
       "total_listeners_count": total
     };
   }
-  
+
   @RequiresToken(permissions: const ["events.http.emit"])
   @Route("/emit", methods: const [POST])
   emitter(@QueryParam() String event) {
@@ -341,7 +374,7 @@ class EventWebHookService {
   @Route("/add", methods: const [POST])
   add(@Attr("token") String creatorToken, @Decode() WebHook hook) {
     hook.creator = creatorToken;
-    
+
     return webhooks.insert(hook).then((_) {
       return {
         "status": "success",
@@ -349,7 +382,7 @@ class EventWebHookService {
       };
     });
   }
-  
+
   @Encode()
   @RequiresToken(permissions: const ["events.webhook.delete"])
   @Route("/remove", methods: const [POST])
@@ -379,7 +412,7 @@ class WebHook {
   @Field()
   List<String> events;
   String creator;
-  
+
   Future<bool> ping() {
     return http.post(url, headers: {
       "X-DirectCode-WebHook": id

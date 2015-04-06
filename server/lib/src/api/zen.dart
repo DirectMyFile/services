@@ -1,18 +1,6 @@
 part of directcode.services.api;
 
-const List<String> _ZENS = const [
-  "Half measures are as bad as nothing at all.",
-  "Keep it logically awesome.",
-  "Don't be evil.",
-  "Be fun.",
-  "Don't be afraid to fail.",
-  "Practicality beats purity.",
-  "Make mistakes, and learn from them.",
-  "Do not be afraid to rewrite something, if it is for a better cause.",
-  "Innovation is just as good as invention.",
-  "Shoot for the best and you get the rest.",
-  "Break it."
-];
+final List<String> _ZENS = fromDataFile("zen.yaml");
 
 @Route("/zen")
 zen() {
